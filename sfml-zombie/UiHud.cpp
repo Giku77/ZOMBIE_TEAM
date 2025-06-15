@@ -59,11 +59,11 @@ void UiHud::AddMessage(const sf::String Message)
 	textString.push_back(Message);
 }
 
-void UiHud::SetHpBar(int mHp, int d, sf::Vector2f p)
+void UiHud::SetHpBar(int mHp, sf::Vector2f p)
 {
 	monsterHpBars.clear();
 	monsterHp = mHp;
-	monsterHp -= d;
+	
 	sf::RectangleShape monsterHpBar;
 	sf::Vector2f hpBarSize = { static_cast<float>(monsterHp), 20.f };
 	monsterHpBar.setPosition(p);
@@ -78,13 +78,16 @@ void UiHud::SetLevelBar(float l)
 	int startX = 3.f;
 
 	levelBar.clear();
-	if (l > 0) {
+
+	if (l > 0)
+	{
 		levelpos = { FRAMEWORK.GetWindowBounds().width / 2.f - 330.f, FRAMEWORK.GetWindowBounds().height - 50.f };
 		levelBarHanKan.setPosition(levelpos);
 		levelBar.push_back(levelBarHanKan);
 	}
 
-	for (int i = 0; i < count - 1; i++) {
+	for (int i = 0; i < count - 1; i++)
+	{
 		levelpos = { levelBarHanKan.getPosition().x + startX + levelBarHanKan.getLocalBounds().width, levelBarHanKan.getPosition().y };
 		levelBarHanKan.setPosition(levelpos);
 		levelBar.push_back(levelBarHanKan);
@@ -100,7 +103,6 @@ void UiHud::Init()
 	GameOverText.setPosition({ 310.f ,600.f });
 	GameOverText.setCharacterSize(150);
 	GameOverText.setString("Game over");
-
 
 	waveText.setPosition({ FRAMEWORK.GetWindowBounds().width - 180.f,FRAMEWORK.GetWindowBounds().top + 50.f });
 	hpText.setPosition({ FRAMEWORK.GetWindowBounds().left + 50.f,FRAMEWORK.GetWindowBounds().top + 50.f });

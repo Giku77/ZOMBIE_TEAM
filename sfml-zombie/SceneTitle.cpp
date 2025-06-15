@@ -17,9 +17,9 @@ void SceneTitle::Init()
 
 	titleText.setFont(font);
 	titleText.setString("ZOMBIE \nGAME");
+	titleText.setRotation(-10);
 	titleText.setPosition({ 90.f , bounds.top + 210.f });
 	titleText.setCharacterSize(150);
-	titleText.setRotation(-10);
 
 	startText.setFont(font);
 	startText.setString("Game Start");
@@ -28,7 +28,7 @@ void SceneTitle::Init()
 
 	exitText.setFont(font);
 	exitText.setString("Exit");
-	exitText.setPosition({ 430.f ,bounds.top + 800.f });
+	exitText.setPosition({430.f ,bounds.top + 800.f });
 	exitText.setCharacterSize(80);
 
 	//background1 = new SpriteGo("graphics/background.png");
@@ -55,15 +55,16 @@ void SceneTitle::Init()
 void SceneTitle::Enter()
 {
 	Scene::Enter();
+	SOUND_MGR.Play();
 	//FRAMEWORK.GetWindow().setView(uiView);
 	sf::Vector2u texSize = TEXTURE_MGR.Get("graphics/background.png").getSize();
-	std::cout << "¹è°æ ÅØ½ºÃ³ »çÀÌÁî: " << texSize.x << "x" << texSize.y << std::endl;
+	std::cout << "ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Ã³ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: " << texSize.x << "x" << texSize.y << std::endl;
 }
 
 void SceneTitle::Update(float dt)
 {
 	Scene::Update(dt);
-
+	
 	sf::Vector2f mouseWorldPos = FRAMEWORK.GetWindow().mapPixelToCoords(sf::Mouse::getPosition(FRAMEWORK.GetWindow()));
 	bool isStartMouseOver = Utils::PointInTransformBounds(startText, startText.getLocalBounds(), mouseWorldPos);
 	bool isExitMouseOver = Utils::PointInTransformBounds(exitText, exitText.getLocalBounds(), mouseWorldPos);
@@ -72,7 +73,7 @@ void SceneTitle::Update(float dt)
 	{
 		isDrawBackgroundChange = true;
 		startText.setFillColor(sf::Color::Yellow);
-		startText.setScale({ 1.1f,1.1f });
+		startText.setScale({ 1.f,1.f });
 		if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 		{
 			isStartClick = true;

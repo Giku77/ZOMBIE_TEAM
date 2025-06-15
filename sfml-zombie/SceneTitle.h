@@ -31,7 +31,7 @@ protected:
 public:
 	SceneTitle();
 	~SceneTitle() = default;
-
+	
 	void Init() override;
 	void Enter() override;
 	void Exit() override;
