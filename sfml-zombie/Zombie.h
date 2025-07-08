@@ -14,6 +14,7 @@ public:
 		Boss,
 		Custom,
 	};
+
 	//struct Status 
 	//{
 	//	int StatusmaxHp = 0;
@@ -65,6 +66,7 @@ public:
 	void Draw(sf::RenderWindow& window) override;
 
 	void SetType(Types type);
+	void ChangeType(Types t) { type = t; }
 
 	sf::FloatRect GetLocalBounds() const override {
 		return body.getLocalBounds();

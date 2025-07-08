@@ -8,12 +8,8 @@ Zombie::Zombie(const std::string& name)
 }
 
 //Zombie::Zombie(int maxHp, float speed, int damage, float attackInterval, std::string texid)
+//	:status({ maxHp, speed, damage, attackInterval, texid })
 //{
-//	status.StatusmaxHp = maxHp;
-//	status.Statusspeed = speed;
-//	status.Statusdamage = damage;
-//	status.StatusattackInterval = attackInterval;
-//	status.texid = texid;
 //}
 
 Zombie::Zombie(int maxHp, float speed, int damage, float attackInterval, std::string texid)
@@ -77,6 +73,7 @@ void Zombie::Reset()
 	SetOrigin(Origins::MC);
 	SetPosition({ 0.f, 0.f });
 	SetRotation(0.f);
+
 	if (type == Types::Boss) {
 	  SetScale({ 3.f, 3.f });
 	}
@@ -106,7 +103,6 @@ void Zombie::Update(float dt)
 			player->OnDamage(damage);
 			attackTimer = 0.f;
 		}
-
 	}
 }
 
@@ -119,6 +115,7 @@ void Zombie::Draw(sf::RenderWindow& window)
 void Zombie::SetType(Types type)
 {
 	this->type = type;
+
 	switch (this->type)
 	{
 	case Types::Bloater:
@@ -142,30 +139,36 @@ void Zombie::SetType(Types type)
 		damage = 5.f;
 		attackInterval = 1.f;
 		break;
-	/*case Types::Boss:
+	case Types::Boss:
 		texId = "graphics/bloater.png";
 		maxHp = 500;
 		speed = 200.f;
 		damage = 20.f;
 		attackInterval = 0.8f;
-		break;*/
+		break;
 	default:
-		std::cout << "속도 : " << maxHp << std::endl;
-		//speed = customSpeed;
-		/*texId = status.texid;
-		maxHp = status.StatusmaxHp;
-		speed = status.Statusspeed;
-		damage = status.Statusdamage;
-		attackInterval = status.StatusattackInterval;*/
+		//std::cout << "스피드 : " << speed << std::endl;
 		break;
 	}
 
 }
 
+
 void Zombie::OnDamage(int d)
 {
 	hp = Utils::Clamp(hp - d, 0, maxHp);
+	std::cout << "좀비의 체력 : " << hp << std::endl;
+	if (hp <= 250.f && type == Types::Boss) {
+		if (player != nullptr && !player->GetisAz()) {
+			player->SetisAz(true);
+			speed = 100.f;
+		}
+	}
 	if (hp == 0) {
+		if (player != nullptr) {
+			player->AddExp(Utils::RandomRange(1.f, 10.f));
+			if(type == Types::Boss) player->AddExp(50.f);
+		}
 		SetActive(false);
 	}
 

@@ -30,8 +30,20 @@ protected:
 	int ammo = 0;
 	int maxAmmo = 0;
 
+	int level = 1;
+	float exp = 0.f;
+	float nextExp = 100.f;
+
+	bool isAz = false;
+
 public:
 	bool isAlive() const { return hp > 0; }
+
+	void AddExp(float f) { exp += f; }
+
+
+	void SetisAz(bool r) { isAz = r; }
+	bool GetisAz() { return isAz; }
 
 	void SetAmmo(int a) { 
 		maxAmmo += a; 

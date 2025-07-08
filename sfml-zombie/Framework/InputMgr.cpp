@@ -9,6 +9,12 @@ std::unordered_map<Axis, AxisInfo> InputMgr::axisInfoMap;
 
 sf::Vector2i InputMgr::mousePosition;
 
+bool InputMgr::isTyping = false;
+
+std::string InputMgr::shuffled = "zxcv";
+
+int InputMgr::currentIndex = 0;
+
 void InputMgr::Init()
 {
 	AxisInfo infoH;
@@ -26,6 +32,7 @@ void InputMgr::Init()
 	infoV.negatives.push_back(sf::Keyboard::W);
 	infoV.negatives.push_back(sf::Keyboard::Up);
 	axisInfoMap.insert({ Axis::Vertical , infoV });
+	Utils::ShuffleString(shuffled);
 }
 
 void InputMgr::Clear() 
@@ -66,6 +73,25 @@ void InputMgr::UpdateEvent(const sf::Event& ev)
 		upKeys.push_back(code);
 	}
 		break;
+	}
+	if (isTyping && ev.type == sf::Event::TextEntered) {
+		char inputChar = static_cast<char>(ev.text.unicode);
+
+		if (inputChar >= 'A' && inputChar <= 'Z')
+			inputChar = inputChar - 'A' + 'a'; 
+
+		if (inputChar == shuffled[currentIndex]) {
+			std::cout << "입력: " << inputChar << std::endl;
+			currentIndex++;
+		}
+		else {
+			std::cout << "오답: " << inputChar << " (기대: " << shuffled[currentIndex] << ")\n";
+		}
+
+		if (currentIndex >= shuffled.size()) {
+			std::cout << "정답 입력 완료!\n";
+			isTyping = false;
+		}
 	}
 }
 

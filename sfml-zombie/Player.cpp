@@ -63,6 +63,9 @@ void Player::Reset()
 	look = { 1.0f, 0.f };
 	shootTimer = 0.f;
 	hp = maxHp;
+	level = 1;
+	exp = 0.f;
+	nextExp = 100.f;
 }
 
 void Player::Update(float dt)
@@ -80,12 +83,23 @@ void Player::Update(float dt)
 
 
 	//Pos
-	dir.x = InputMgr::GetAxis(Axis::Horizontal);
-	dir.y = InputMgr::GetAxis(Axis::Vertical);
+	if (!isAz) {
+		dir.x = InputMgr::GetAxis(Axis::Horizontal);
+		dir.y = InputMgr::GetAxis(Axis::Vertical);
+	}
+	else {
+		dir = { 0.f, 0.f };
+		InputMgr::isTyping = true;
+	}
+	
+	if (!InputMgr::isTyping) {
+		isAz = false;
+	}
 
 	if (Utils::Magnitude(dir) > 1.f) {
 		Utils::Normalize(dir); //대각선 이동에서 정규화로 1로 크기 조절 필요
 	}
+
 	SetPosition(position + dir * speed * dt);
 
 	//Rot
@@ -109,6 +123,12 @@ void Player::Update(float dt)
 		if (ammo > 30) ammo = 30;
 		maxAmmo -= ammo;
 	}
+
+	if (exp > nextExp) {
+		level++;
+		exp -= nextExp;
+		nextExp = 100 * pow(1.15, level - 1);
+	}
 }
 
 void Player::Draw(sf::RenderWindow& window)
@@ -120,6 +140,8 @@ void Player::Draw(sf::RenderWindow& window)
 void Player::shoot()
 {
 	std::cout << "플레이어의 총알 : " << ammo <<  " / " << maxAmmo << std::endl;
+	std::cout << "플레이어의 레벨 : " << level <<  std::endl;
+	std::cout << "플레이어의 경험치 : " << exp << " / " << nextExp << std::endl;
 	if (ammo > 0) {
 		Bullet* bullet = nullptr;
 		if (bulletPool.empty()) {

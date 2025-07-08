@@ -30,6 +30,10 @@ void SceneGame::Init() {
 		Zombie* zombie = (Zombie*)AddGameObject(new Zombie());
 		zombie->SetActive(false);
 		zombiePool.push_back(zombie);
+
+		Item* item = (Item*)AddGameObject(new Item());
+		item->SetActive(false);
+		itemPool.push_back(item);
 	}
 
 	Scene::Init();
@@ -39,11 +43,16 @@ void SceneGame::Exit() {
 	FRAMEWORK.GetWindow().setMouseCursorVisible(true);
 
 	for (auto zombie : zombieList) {
-		//RemoveGameObject(zombie);
 		zombie->SetActive(false);
 		zombiePool.push_back(zombie);
 	}
 	zombieList.clear();
+
+	for (auto item : itemList) {
+		item->SetActive(false);
+		itemPool.push_back(item);
+	}
+	itemList.clear();
 
 	std::cout << "zombiePool의 사이즈 : " << zombiePool.size() << std::endl;
 
@@ -94,7 +103,7 @@ void SceneGame::Update(float dt)
 	}
 
 	if (InputMgr::GetKeyDown(sf::Keyboard::LShift)) {
-		SpawnItems(5);
+		SpawnItems(15);
 		SpawnBoss(500, 200.f, 20.f, 0.8f, "graphics/bloater.png");
 	}
 
@@ -133,6 +142,7 @@ void SceneGame::SpawnBoss(int maxHp, float speed, int damage, float attackInterv
 {
 	if (zombiePool.empty()) {
 		boss = (Zombie*)AddGameObject(new Zombie(maxHp, speed, damage, attackInterval, texid));
+		//boss->ChangeType(Zombie::Types::Boss);
 		boss->Init();
 	}
 	else {
@@ -143,8 +153,8 @@ void SceneGame::SpawnBoss(int maxHp, float speed, int damage, float attackInterv
 
 	boss->SetType(Zombie::Types::Boss);
 
-	boss->Reset();
 
+	boss->Reset();
 	boss->SetPosition(Utils::RandomInUnitCircle() * 500.f);
 
 	zombieList.push_back(boss);
@@ -168,7 +178,7 @@ void SceneGame::SpawnItems(int count)
 
 		item->Reset();
 
-		item->SetPosition(Utils::RandomInUnitCircle() * 500.f);
+		item->SetPosition(Utils::RandomInUnitCircle() * 1000.f);
 
 		itemList.push_back(item);
 	}
