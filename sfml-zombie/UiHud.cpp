@@ -39,7 +39,8 @@ void UiHud::SetOrigin(Origins preset)
 void UiHud::AddFontId(const sf::String fontId)
 {
 
-	if (!font.loadFromFile("fonts/zombiecontrol.ttf")) {
+	if (!font.loadFromFile("fonts/zombiecontrol.ttf"))
+	{
 		std::cout << "폰트 파일 로드 실패" << std::endl;
 	}
 	for (auto& it : texts)

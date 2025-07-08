@@ -4,10 +4,24 @@ class SceneTitle :
 	public Scene
 {
 protected:
-	UiHud* uihud;
+	sf::RectangleShape startRect;
+	sf::RectangleShape exitRect;
+
 	sf::Text titleText;
 	sf::Text startText;
 	sf::Text exitText;
+	
+	float startwidth;
+	float startHeight;
+	float exitwidth;
+	float exitHeight;
+
+	sf::Font font;
+
+	bool isExitClick;
+	bool isStartClick;
+	bool isDrawStartRect;
+	bool isDrawExitRect;
 
 public:
 	SceneTitle();
