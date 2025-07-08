@@ -3,9 +3,11 @@
 #include "SceneDev1.h"
 #include "SceneDev2.h"
 #include "SceneGame.h"
+#include "SceneTitle.h"
 
 void SceneMgr::Init()
 {
+	scenes[SceneIds::Title] = new SceneTitle();
 	scenes[SceneIds::Game] = new SceneGame();
 	scenes[SceneIds::Dev1] = new SceneDev1();
 	scenes[SceneIds::Dev2] = new SceneDev2();
