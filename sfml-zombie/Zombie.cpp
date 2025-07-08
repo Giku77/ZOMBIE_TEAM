@@ -7,6 +7,22 @@ Zombie::Zombie(const std::string& name)
 {
 }
 
+//Zombie::Zombie(int maxHp, float speed, int damage, float attackInterval, std::string texid)
+//{
+//	status.StatusmaxHp = maxHp;
+//	status.Statusspeed = speed;
+//	status.Statusdamage = damage;
+//	status.StatusattackInterval = attackInterval;
+//	status.texid = texid;
+//}
+
+Zombie::Zombie(int maxHp, float speed, int damage, float attackInterval, std::string texid)
+	:maxHp(maxHp), speed(speed), damage(damage), attackInterval(attackInterval), texId(texid)
+{
+}
+
+
+
 void Zombie::SetPosition(const sf::Vector2f& pos)
 {
 	GameObject::SetPosition(pos);
@@ -61,6 +77,10 @@ void Zombie::Reset()
 	SetOrigin(Origins::MC);
 	SetPosition({ 0.f, 0.f });
 	SetRotation(0.f);
+	if (type == Types::Boss) {
+	  SetScale({ 3.f, 3.f });
+	}
+	else
 	SetScale({ 1.f, 1.f });
 
 	hp = maxHp;
@@ -71,15 +91,7 @@ void Zombie::Update(float dt)
 {
 	//std::cout << "거리 : " << Utils::Distance(player->GetPosition(), GetPosition()) << std::endl;
 	if (Utils::Distance(player->GetPosition(), GetPosition()) <= 5) {
-		//speed = 0.f;
 		dir = { 0.f, 0.f };
-		///*if (Utils::CheckCollision(player->getBody(), body)) {
-		//	dir = Utils::GetNormal(player->GetPosition() - GetPosition());
-		//	dir.x *= -1.f;
-		//	dir.y *= -1.f;
-		//	SetRotation(Utils::Angle(dir));
-		//	SetPosition(GetPosition() + dir * speed * dt);
-		//}*/
 	}
 	else {
 		dir = Utils::GetNormal(player->GetPosition() - GetPosition());
@@ -113,24 +125,38 @@ void Zombie::SetType(Types type)
 		texId = "graphics/bloater.png";
 		maxHp = 200;
 		speed = 50.f;
-		damage = 100.f;
+		damage = 10.f;
 		attackInterval = 1.f;
 		break;
 	case Types::Chase:
 		texId = "graphics/chaser.png";
 		maxHp = 100;
 		speed = 100.f;
-		damage = 100.f;
+		damage = 3.f;
 		attackInterval = 1.f;
 		break;
 	case Types::Crawler:
 		texId = "graphics/crawler.png";
 		maxHp = 50;
 		speed = 200.f;
-		damage = 100.f;
+		damage = 5.f;
 		attackInterval = 1.f;
 		break;
+	/*case Types::Boss:
+		texId = "graphics/bloater.png";
+		maxHp = 500;
+		speed = 200.f;
+		damage = 20.f;
+		attackInterval = 0.8f;
+		break;*/
 	default:
+		std::cout << "속도 : " << maxHp << std::endl;
+		//speed = customSpeed;
+		/*texId = status.texid;
+		maxHp = status.StatusmaxHp;
+		speed = status.Statusspeed;
+		damage = status.Statusdamage;
+		attackInterval = status.StatusattackInterval;*/
 		break;
 	}
 

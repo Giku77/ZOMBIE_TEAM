@@ -27,8 +27,17 @@ protected:
 	int hp = 0;
 	int maxHp = 100;
 
+	int ammo = 0;
+	int maxAmmo = 0;
+
 public:
 	bool isAlive() const { return hp > 0; }
+
+	void SetAmmo(int a) { 
+		maxAmmo += a; 
+		if (maxAmmo > 100) maxAmmo = 100;
+	}
+	int GetAmmo() const { return ammo; }
 
 	Player(const std::string& name = "");
 	~Player() override = default;
@@ -58,6 +67,10 @@ public:
 	const HitBox& GetHitBox() const { return hitbox; }
 
 	void shoot();
+	void heal(int h) {
+		hp += h;
+		if (hp > maxHp) hp = maxHp;
+	}
 	void OnDamage(int d);
 };
 

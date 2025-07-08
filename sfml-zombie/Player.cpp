@@ -104,6 +104,11 @@ void Player::Update(float dt)
 		shootTimer = 0.f;
 		shoot();
 	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::R)) {
+		ammo += maxAmmo;
+		if (ammo > 30) ammo = 30;
+		maxAmmo -= ammo;
+	}
 }
 
 void Player::Draw(sf::RenderWindow& window)
@@ -114,27 +119,32 @@ void Player::Draw(sf::RenderWindow& window)
 
 void Player::shoot()
 {
-	Bullet* bullet = nullptr;
-	if (bulletPool.empty()) {
-		bullet = new Bullet();
-		bullet->Init();
-	}
-	else {
-		bullet = bulletPool.front();
-		bulletPool.pop_front();
-		bullet->SetActive(true);
-	}
-	bullet->Reset();
-	bullet->Fire(position + look * 10.f, look, 1000.f, 10);
+	std::cout << "플레이어의 총알 : " << ammo <<  " / " << maxAmmo << std::endl;
+	if (ammo > 0) {
+		Bullet* bullet = nullptr;
+		if (bulletPool.empty()) {
+			bullet = new Bullet();
+			bullet->Init();
+		}
+		else {
+			bullet = bulletPool.front();
+			bulletPool.pop_front();
+			bullet->SetActive(true);
+		}
+		bullet->Reset();
+		bullet->Fire(position + look * 10.f, look, 1000.f, 10);
 
-	bulletList.push_back(bullet);
-	sceneGame->AddGameObject(bullet);
+		bulletList.push_back(bullet);
+		sceneGame->AddGameObject(bullet);
+		ammo--;
+	}
 }
 
 void Player::OnDamage(int d) {
 	if (!isAlive()) return;
 
 	hp = Utils::Clamp(hp - d, 0, maxHp);
+	std::cout << "플레이어의 체력 : " << hp << std::endl;
 	if (!isAlive()) {
 		SCENE_MGR.ChangeScene(SceneIds::Game);
 	}
