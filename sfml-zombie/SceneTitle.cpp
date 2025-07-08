@@ -114,7 +114,7 @@ void SceneTitle::Update(float dt)
 	{
 		startText.setFillColor(sf::Color::Red);
 		startText.setScale({ 1.1f,1.1f });
-		if (InputMgr::GetMouseButtonDown)
+		if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 		{
 			isStartClick = true;
 		}
@@ -129,7 +129,7 @@ void SceneTitle::Update(float dt)
 	{
 		exitText.setFillColor(sf::Color::Red);
 		exitText.setScale({ 1.1f,1.1f });
-		if (InputMgr::GetMouseButtonDown)
+		if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 		{
 			isExitClick = true;
 		}
@@ -151,14 +151,13 @@ void SceneTitle::Draw(sf::RenderWindow& window)
 
 	if (isStartClick)
 	{
-		SceneMgr::ChangeScene(SceneIds::Game);
+		SCENE_MGR.ChangeScene(SceneIds::Game);
 		isStartClick = false;
 	}
 
 	if (isExitClick)
 	{
-		SceneMgr::ChangeScene(SceneIds::Game);
-		isExitClick = false;
+		FRAMEWORK.GetWindow().close();
 	}
 }
 
