@@ -12,6 +12,7 @@ protected:
 	std::list<Zombie*> zombiePool;
 
 	sf::Sprite cursor;
+	bool isActive = true;
 
 public:
 	SceneGame();

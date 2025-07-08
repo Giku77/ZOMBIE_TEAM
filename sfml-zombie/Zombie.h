@@ -21,7 +21,9 @@ protected:
 
 
 	sf::Sprite body;
+	sf::Sprite blood;
 	std::string texId;
+	std::string texbloodId;
 
 	sf::Vector2f dir;
 
@@ -33,6 +35,10 @@ protected:
 
 	float speed = 0.f;
 
+	float shotTimer = 0.f;
+	float bloodTimer = 10.f;
+
+	bool bloodon = false;
 	HitBox hitbox;
 
 public:
@@ -63,5 +69,6 @@ public:
 
 	const HitBox& GetHitBox() const { return hitbox; }
 	void OnDamage(int d);
+	bool IsStunned() const { return shotTimer > 0.f; }
 };
 

@@ -18,6 +18,8 @@ void SceneGame::Init() {
 	texIds.push_back("graphics/crawler.png");
 	texIds.push_back("graphics/crosshair.png");
 	texIds.push_back("graphics/bullet.png");
+	texIds.push_back("graphics/blood.png");
+
 
 	AddGameObject(new TileMap("TileMap"));
 
@@ -85,9 +87,9 @@ void SceneGame::Update(float dt)
 
 	worldView.setCenter(player->GetPosition());
 
-	if (InputMgr::GetKeyDown(sf::Keyboard::Space)) {
+	if (isActive) {
 		SpawnZombies(10);
-		std::cout << "남아 있는 좀비 수 : " << zombieList.size() << std::endl;
+		isActive = false;
 	}
 
 	if (InputMgr::GetKeyDown(sf::Keyboard::Enter)) {
@@ -112,9 +114,10 @@ void SceneGame::SpawnZombies(int count)
 
 		zombie->SetType((Zombie::Types)Utils::RandomRange(0, Zombie::TotalTypes));
 
-		zombie->Reset();
+		zombie->Reset();	
 
-		zombie->SetPosition(Utils::RandomInUnitCircle() * 500.f);
+		zombie->SetPosition(Utils::RandomPointInRect({ -300.f, -300.f, 600.f, 600.f }));
+	
 
 		zombieList.push_back(zombie);
 	}

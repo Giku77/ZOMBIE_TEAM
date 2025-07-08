@@ -44,6 +44,8 @@ void Zombie::Init()
 {
 	sortingLayer = SortingLayers::Foreground;
 	sortingOrder = 0;
+	
+
 
 	SetType(type);
 }
@@ -57,6 +59,8 @@ void Zombie::Reset()
 	player = (Player*)SCENE_MGR.GetCurrentScene()->FindGameObject("Player");
 
 	body.setTexture(TEXTURE_MGR.Get(texId), true);
+	texbloodId = "graphics/blood.png";
+	blood.setTexture(TEXTURE_MGR.Get(texbloodId), true);
 
 	SetOrigin(Origins::MC);
 	SetPosition({ 0.f, 0.f });
@@ -65,13 +69,19 @@ void Zombie::Reset()
 
 	hp = maxHp;
 	attackTimer = 0.f;
+	bloodTimer = 10.f;
 }
 
 void Zombie::Update(float dt)
 {
 	//std::cout << "°Å¸® : " << Utils::Distance(player->GetPosition(), GetPosition()) << std::endl;
-	if (Utils::Distance(player->GetPosition(), GetPosition()) <= 5) {
+	if (Utils::Distance(player->GetPosition(), GetPosition()) <= 5 || shotTimer > 0.f) {
 		//speed = 0.f;
+		if (shotTimer > 0.f)
+		{
+
+			shotTimer -= dt;
+		}
 		dir = { 0.f, 0.f };
 		///*if (Utils::CheckCollision(player->getBody(), body)) {
 		//	dir = Utils::GetNormal(player->GetPosition() - GetPosition());
@@ -96,12 +106,22 @@ void Zombie::Update(float dt)
 		}
 
 	}
+	if (bloodon)
+	{
+		bloodTimer -= dt;
+	}
+
 }
 
 void Zombie::Draw(sf::RenderWindow& window)
 {
 	window.draw(body);
 	hitbox.Draw(window);
+	if (bloodTimer > 0.f)
+	{
+		window.draw(blood);
+	}
+
 }
 
 void Zombie::SetType(Types type)
@@ -112,21 +132,21 @@ void Zombie::SetType(Types type)
 	case Types::Bloater:
 		texId = "graphics/bloater.png";
 		maxHp = 200;
-		speed = 50.f;
+		speed = 5.f;
 		damage = 100.f;
 		attackInterval = 1.f;
 		break;
 	case Types::Chase:
 		texId = "graphics/chaser.png";
 		maxHp = 100;
-		speed = 100.f;
+		speed = 10.f;
 		damage = 100.f;
 		attackInterval = 1.f;
 		break;
 	case Types::Crawler:
 		texId = "graphics/crawler.png";
 		maxHp = 50;
-		speed = 200.f;
+		speed = 20.f;
 		damage = 100.f;
 		attackInterval = 1.f;
 		break;
@@ -141,6 +161,10 @@ void Zombie::OnDamage(int d)
 	hp = Utils::Clamp(hp - d, 0, maxHp);
 	if (hp == 0) {
 		SetActive(false);
+		bloodon = true;
 	}
-
+	else
+	{
+		shotTimer = 0.3f;
+	}
 }
