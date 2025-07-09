@@ -4,6 +4,7 @@
 #include "TileMap.h"
 #include "Zombie.h"
 #include "Item.h"
+#include "UiHud.h"
 
 SceneGame::SceneGame()
 	:Scene(SceneIds::Game)
@@ -23,9 +24,9 @@ void SceneGame::Init() {
 	texIds.push_back("graphics/bullet.png");
 	texIds.push_back("graphics/ammo_pickup.png");
 	texIds.push_back("graphics/health_pickup.png");
+	texIds.push_back("graphics/speed_pickup.png");
 
-	AddGameObject(new TileMap("TileMap"));
-
+	tile = (TileMap*)AddGameObject(new TileMap("TileMap"));
 	player = (Player*)AddGameObject(new Player("Player"));
 
 	for (int i = 0; i < 100; i++) {
@@ -40,7 +41,6 @@ void SceneGame::Init() {
 
 	uihud = new UiHud();
 	uihud->Init();
-
 	Scene::Init();
 }
 
@@ -59,7 +59,7 @@ void SceneGame::Exit() {
 	}
 	itemList.clear();
 
-	std::cout << "zombiePoolÀÇ »çÀÌÁî : " << zombiePool.size() << std::endl;
+	std::cout << "zombiePoolï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : " << zombiePool.size() << std::endl;
 
 	Scene::Exit();
 }
@@ -83,10 +83,10 @@ void SceneGame::Enter() {
 	Utils::SetOrigin(cursor, Origins::MC);
 }
 
-void SceneGame::Update(float dt) 
+void SceneGame::Update(float dt)
 {
 	cursor.setPosition(ScreenToUi(InputMgr::GetMousePosition()));
-
+	uihud->SetLevelBar(player->getPer());
 	Scene::Update(dt);
 
 	auto it = zombieList.begin();
@@ -102,14 +102,36 @@ void SceneGame::Update(float dt)
 
 	worldView.setCenter(player->GetPosition());
 
+	/*for (auto w : tile->wallRects) {
+		sf::FloatRect transformedRect = Utils::TransformRect(tile->GetTransform(), w);
+
+		if (transformedRect.intersects(player->GetGlobalBounds())) {
+			std::cout << "ï¿½æµ¹ ï¿½ï¿½ï¿½ï¿½" << std::endl;
+		}
+	}*/
+
+	/*sf::Vector2f nextPos = player->GetPosition();
+	if (tile->GetBounds().contains(nextPos))
+	{
+		player->SetPosition(nextPos);
+	}*/
+	/*sf::FloatRect playerBounds = player->GetGlobalBounds();
+	sf::FloatRect mapBounds = tile->GetBounds();
+
+	if (mapBounds.contains(playerBounds.left, playerBounds.top) &&
+		mapBounds.contains(playerBounds.left + playerBounds.width, playerBounds.top + playerBounds.height))
+	{
+		std::cout << "ï¿½ï¿½ï¿½ È®ï¿½ï¿½" << std::endl;
+	}*/
+
 	if (InputMgr::GetKeyDown(sf::Keyboard::Space)) {
 		SpawnZombies(10);
-		std::cout << "³²¾Æ ÀÖ´Â Á»ºñ ¼ö : " << zombieList.size() << std::endl;
+		std::cout << "ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ : " << zombieList.size() << std::endl;
 	}
 
 	if (InputMgr::GetKeyDown(sf::Keyboard::LShift)) {
 		SpawnItems(15);
-		SpawnBoss(500, 200.f, 20.f, 0.8f, "graphics/bloater.png");
+		//SpawnBoss(500, 200.f, 20.f, 0.8f, "graphics/bloater.png");
 	}
 
 	if (InputMgr::GetKeyDown(sf::Keyboard::Enter)) {
@@ -149,18 +171,9 @@ void SceneGame::SpawnZombies(int count)
 
 void SceneGame::SpawnBoss(int maxHp, float speed, int damage, float attackInterval, std::string texid)
 {
-	if (zombiePool.empty()) {
-		boss = (Zombie*)AddGameObject(new Zombie(maxHp, speed, damage, attackInterval, texid));
-		//boss->ChangeType(Zombie::Types::Boss);
-		boss->Init();
-	}
-	else {
-		boss = zombiePool.front();
-		zombiePool.pop_front();
-		boss->SetActive(true);
-	}
-
-	boss->SetType(Zombie::Types::Boss);
+	boss = (Zombie*)AddGameObject(new Zombie(maxHp, speed, damage, attackInterval, texid));
+	boss->ChangeType(Zombie::Types::Boss);
+	boss->Init();
 
 
 	boss->Reset();
@@ -198,5 +211,7 @@ void SceneGame::Draw(sf::RenderWindow& window) {
 
 	window.setView(uiView);
 	window.draw(cursor);
-	uihud->Draw(window);
+	if (uihud != nullptr) {
+		uihud->Draw(window);
+	}
 }

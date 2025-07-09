@@ -5,7 +5,7 @@
 class Player;
 
 struct ItemType {
-	enum class Type { Ammo, Heal, Total };
+	enum class Type { Ammo, Heal, Speed, Total };
 	Type type;
 	std::string texId;
 

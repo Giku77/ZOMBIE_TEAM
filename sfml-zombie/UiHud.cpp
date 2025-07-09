@@ -3,6 +3,7 @@
 
 UiHud::UiHud(const std::string& name)
 	: GameObject(name), texts(0), textPos(0), textString('0'), levelBar(0), hpBar(0), levelBarHanKan({ 0,0 })
+	: GameObject(name), texts(0), textPos(0), textString('0'), levelBar(0), hpBar(0), levelBarHanKan({ 0,0 })
 {
 }
 
@@ -40,11 +41,15 @@ void UiHud::SetCharacterSize(int size)
 {
 }
 
+void UiHud::SetCharacterSize(int size)
+{
+}
+
 void UiHud::AddFontId(const sf::String fontId)
 {
 	if (!font.loadFromFile("fonts/zombiecontrol.ttf"))
 	{
-		std::cout << "ÆùÆ® ÆÄÀÏ ·Îµå ½ÇÆÐ" << std::endl;
+		std::cout << "ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½" << std::endl;
 	}
 	//for (int i =0; i<500; i++)
 	//{
@@ -136,7 +141,7 @@ void UiHud::Draw(sf::RenderWindow& window)
 	
 	for (int i = 0; i < 1; i++)
 	{
-		//std::cout << "·¹º§¹Ù ±×¸®±â" << std::endl;
+		//std::cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½" << std::endl;
 		window.draw(levelBarHanKan);
 	}
 }

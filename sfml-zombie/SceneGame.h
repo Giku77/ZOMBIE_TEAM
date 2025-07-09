@@ -1,16 +1,17 @@
 #pragma once
 #include "Scene.h"
 
-class Uihud;
+class UiHud;
 class Player;
 class Zombie;
 class Item;
+class TileMap;
 class SceneGame : public Scene
 {
 protected:
 	Player* player = nullptr;
 	Zombie* boss = nullptr;
-	UiHud* uihud = nullptr;
+	TileMap* tile = nullptr;
 
 	std::list<Zombie*> zombieList;
 	std::list<Zombie*> zombiePool;
@@ -19,6 +20,8 @@ protected:
 	std::list<Item*> itemPool;
 
 	sf::Sprite cursor;
+
+	UiHud* uihud = nullptr;
 
 public:
 	SceneGame();

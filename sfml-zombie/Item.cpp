@@ -59,6 +59,9 @@ void Item::Reset()
 	if (GetName() == "Heal" || type.type == ItemType::Type::Heal) {
 		SetItemType({ ItemType::Type::Heal, "graphics/health_pickup.png" });
 	}
+	if (GetName() == "Speed" || type.type == ItemType::Type::Speed) {
+		SetItemType({ ItemType::Type::Speed, "graphics/speed_pickup.png" });
+	}
 	sprite.setTexture(TEXTURE_MGR.Get(type.texId), true);
 	SetOrigin(Origins::MC);
 
@@ -77,6 +80,9 @@ void Item::Update(float dt)
 		}
 		if ((GetName() == "Heal" || type.type == ItemType::Type::Heal) && GetActive()) {
 			player->heal(30);
+		}
+		if ((GetName() == "Speed" || type.type == ItemType::Type::Speed) && GetActive()) {
+			player->AddSpeed(100.f);
 		}
 		SetActive(false);
 	}

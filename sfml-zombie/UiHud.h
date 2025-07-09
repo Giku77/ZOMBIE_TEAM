@@ -4,6 +4,7 @@
 
 class UiHud :
 	public GameObject
+	public GameObject
 {
 protected:
 	std::vector<sf::Text> texts;
@@ -52,6 +53,8 @@ public:
 	void SetCharacterSize(int size);
 	void AddFontId(const sf::String id);
 	void AddMessage(const sf::String Message);
+
+	void SetLevelBar(float l);
 
 	void SetLevelBar(float l);
 

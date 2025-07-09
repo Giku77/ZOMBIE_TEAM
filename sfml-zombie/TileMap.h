@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "HitBox.h"
 class TileMap :
     public GameObject
 {
@@ -12,9 +13,15 @@ protected:
 	sf::Vector2i cellCount;
 	sf::Vector2f cellSize;
 
+
 public:
+	std::vector<sf::FloatRect> wallRects;
+
 	TileMap(const std::string& name = "");
 	virtual ~TileMap() = default;
+
+	sf::FloatRect GetBounds() const;
+	
 
 	void Set(const sf::Vector2i& c, const sf::Vector2f& s);
 	void UpdateTransform();

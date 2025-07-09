@@ -6,6 +6,14 @@ TileMap::TileMap(const std::string& name)
 {
 }
 
+sf::FloatRect TileMap::GetBounds() const
+{
+	return sf::FloatRect(
+		-origin + position,  
+		sf::Vector2f(cellCount.x * cellSize.x, cellCount.y * cellSize.y)
+	);
+}
+
 void TileMap::Set(const sf::Vector2i& c, const sf::Vector2f& s)
 {
 	cellCount = c;
@@ -34,6 +42,14 @@ void TileMap::Set(const sf::Vector2i& c, const sf::Vector2f& s)
 			int texIndex = Utils::RandomRange(0, 3);
 			if (i == 0 || i == c.y - 1 || j == 0 || j == c.x - 1) {
 				texIndex = 3;
+
+				sf::FloatRect wallTileRect(
+					j * s.x,
+					i * s.y,
+					s.x,
+					s.y
+				);
+				wallRects.push_back(wallTileRect);
 			}
 
 			int quadIndex = i * c.x + j;
