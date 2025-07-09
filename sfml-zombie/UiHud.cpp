@@ -133,10 +133,10 @@ void UiHud::Draw(sf::RenderWindow& window)
 	{
 		window.draw(e);
 	}
-	
-	for (int i = 0; i < 1; i++)
+
+	for (auto v : levelBar)
 	{
-		window.draw(levelBarHanKan);
+		window.draw(v);
 	}
 }
 

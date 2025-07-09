@@ -6,13 +6,13 @@ class TileMap :
 {
 protected:
 	sf::VertexArray va;
+	sf::RenderStates state;
 	std::string spriteSheetId = "graphics/background_sheet.png";
 	sf::Texture* texture = nullptr;
 	sf::Transform transform;
 
 	sf::Vector2i cellCount;
 	sf::Vector2f cellSize;
-
 
 public:
 	std::vector<sf::FloatRect> wallRects;
