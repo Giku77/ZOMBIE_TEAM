@@ -30,9 +30,10 @@ protected:
 	int ZombieSpawned = 0;
 	int ZombieRemaining = 0;
 	int TileSize = 0;
-	float SpawnTimer = 0;
+	float SpawnTimer = 0.f;
 	float SpawnInterval = 1.f;
-
+	float ItemSpawnTimer = 0.f;//t시간마다늘어남
+	float ItemSpawnInterval = 2.f;//2초라는값을줌
 
 
 	UiHud* uihud = nullptr;
