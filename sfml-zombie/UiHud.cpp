@@ -2,7 +2,7 @@
 #include "UiHud.h"
 
 UiHud::UiHud(const std::string& name)
-	: GameObject(name), texts(0), textPos(0), textString('0'), levelBar(0), hpBar(0), levelBarHanKan({ 0,0 })
+	: GameObject(name), texts(0), textPos(0), textString('0'), levelBar(0), levelBarHanKan({ 0,0 })
 {
 }
 
@@ -45,7 +45,7 @@ void UiHud::AddFontId(const sf::String fontId)
 {
 	if (!font.loadFromFile("fonts/zombiecontrol.ttf"))
 	{
-		std::cout << "��Ʈ ���� �ε� ����" << std::endl;
+		std::cout << "폰트 로드 불가" << std::endl;
 	}
 	//for (int i =0; i<500; i++)
 	//{
@@ -57,6 +57,18 @@ void UiHud::AddFontId(const sf::String fontId)
 void UiHud::AddMessage(const sf::String Message)
 {
 	textString.push_back(Message);
+}
+
+void UiHud::SetHpBar(int mHp, int d, sf::Vector2f p)
+{
+	monsterHpBars.clear();
+	monsterHp = mHp;
+	monsterHp -= d;
+	sf::RectangleShape monsterHpBar;
+	sf::Vector2f hpBarSize = { static_cast<float>(monsterHp), 20.f };
+	monsterHpBar.setPosition(p);
+	monsterHpBar.setFillColor(sf::Color::Red);
+	monsterHpBars.push_back(monsterHpBar);
 }
 
 void UiHud::SetLevelBar(float l)
@@ -81,36 +93,37 @@ void UiHud::SetLevelBar(float l)
 
 void UiHud::Init()
 {
-
 	font.loadFromFile("fonts/zombiecontrol.ttf");
-	levelBarHanKan.setSize({ 30.f, 15.f });
+	/*levelBarHanKan.setSize({ 30.f, 15.f });
 	levelBarHanKan.setFillColor(sf::Color::Green);
 	levelpos = { FRAMEWORK.GetWindowBounds().left + 500.f,FRAMEWORK.GetWindowBounds().height - 50.f };
+	levelBarHanKan.setPosition({ levelpos.x,levelpos.y });*/
+	GameOverText.setPosition({ 310.f ,600.f });
+	GameOverText.setCharacterSize(150);
+	GameOverText.setString("Game over");
 
-	levelBarHanKan.setPosition({ levelpos.x,levelpos.y });
-	levelBar.push_back(levelBarHanKan);
 
 	waveText.setPosition({ FRAMEWORK.GetWindowBounds().width - 180.f,FRAMEWORK.GetWindowBounds().top + 50.f });
 	hpText.setPosition({ FRAMEWORK.GetWindowBounds().left + 50.f,FRAMEWORK.GetWindowBounds().top + 50.f });
-	levelText.setPosition({ FRAMEWORK.GetWindowBounds().left + 50.f,FRAMEWORK.GetWindowBounds().top + 100.f });
-
-	waveText.setString("wave:"+std::to_string(wavecount));
-	hpText.setString("hp:"+std::to_string(hp));
-	levelText.setString("level:"+std::to_string(level));
+	levelText.setPosition({ FRAMEWORK.GetWindowBounds().left + 50.f,FRAMEWORK.GetWindowBounds().height - 100.f });
+	bulletText.setPosition({ FRAMEWORK.GetWindowBounds().left + 50.f,FRAMEWORK.GetWindowBounds().top + 100.f });
 
 	waveText.setCharacterSize(40);
 	hpText.setCharacterSize(40);
 	levelText.setCharacterSize(40);
+	bulletText.setCharacterSize(40);
 
 	waveText.setFillColor(sf::Color::White);
 	hpText.setFillColor(sf::Color::White);
 	levelText.setFillColor(sf::Color::White);
+	bulletText.setFillColor(sf::Color::White);
 
-	texts.push_back(levelText);
-	texts.push_back(hpText);
 	texts.push_back(waveText);
+	texts.push_back(hpText);
+	texts.push_back(levelText);
+	texts.push_back(bulletText);
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		texts[i].setFont(font);
 	}
@@ -126,6 +139,10 @@ void UiHud::Reset()
 
 void UiHud::Update(float dt)
 {
+	texts[0].setString("wave:" + std::to_string(wavecount));
+	texts[1].setString("hp:" + std::to_string(hp));
+	texts[2].setString("level:" + std::to_string(level));
+	texts[3].setString("bullet:" + std::to_string(bullet) + "/"+std::to_string(maxBullet));
 }
 
 void UiHud::Draw(sf::RenderWindow& window)
@@ -134,11 +151,10 @@ void UiHud::Draw(sf::RenderWindow& window)
 	{
 		window.draw(e);
 	}
-	
-	for (int i = 0; i < 1; i++)
+
+	for (auto& bar : monsterHpBars)
 	{
-		//std::cout << "������ �׸���" << std::endl;
-		window.draw(levelBarHanKan);
+		window.draw(bar);
 	}
 }
 

@@ -12,7 +12,7 @@ protected:
 	std::vector<sf::String> textString;
 
 	std::vector<sf::RectangleShape>levelBar;
-	std::vector<sf::RectangleShape>hpBar;
+	std::vector<sf::RectangleShape>monsterHpBars;
 
 	sf::RectangleShape levelBarHanKan;
 
@@ -25,6 +25,8 @@ protected:
 	float nextlevel = 0.f;
 	int level = 0;
 	int levelBarDrawCount = 0;
+	int bullet = 0;
+	int maxBullet=0;
 
 	std::string fontId;
 	sf::Font font;
@@ -32,10 +34,17 @@ protected:
 	sf::Text levelText;
 	sf::Text hpText;
 	sf::Text waveText;
-	
-	int wavecount;
-	int hp;
+	sf::Text bulletText;
 
+	sf::Text GameOverText;
+	
+	int hp;
+	int wavecount;
+
+	int monsterHp;
+	int playerDamage;
+
+	
 	bool isShowMessage;
 	bool isShowLevel;
 
@@ -53,8 +62,12 @@ public:
 	void AddFontId(const sf::String id);
 	void AddMessage(const sf::String Message);
 
+	void SetHpBar(int mHp, int d, sf::Vector2f p);
 	void SetLevelBar(float l);
-
+	void SetLevel(int l) { level = l; };
+	void SetHp(int l) { hp = l; };
+	void SetWave(int l) { wavecount = l; };
+	void SetBullet(int l, int maxl) { bullet = l; maxBullet = maxl; };
 	void Init() override;
 	void Release() override;
 	void Reset() override;
