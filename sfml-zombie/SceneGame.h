@@ -13,7 +13,7 @@ protected:
 	Player* player = nullptr;
 	TileMap* tilemap = nullptr;
 	Zombie* boss = nullptr;
-	
+
 
 	std::list<Zombie*> zombieList;
 	std::list<Zombie*> zombiePool;
@@ -30,10 +30,11 @@ protected:
 	int ZombieSpawned = 0;
 	int ZombieRemaining = 0;
 	int TileSize = 0;
-	float SpawnTimer = 0;
+	float SpawnTimer = 0.f;
 	float SpawnInterval = 1.f;
+	float ItemSpawnTimer = 0.f;//t시간마다늘어남
+	float ItemSpawnInterval = 2.f;//2초라는값을줌
 
-	
 
 	UiHud* uihud = nullptr;
 
@@ -52,9 +53,8 @@ public:
 	void Update(float dt) override;
 	void Draw(sf::RenderWindow& window) override;
 	void SpawnZombies(int count);
-	
+
 	void OnZombieKilled();// 좀비0마리되면 다음웨이브 체크용
 	void SpawnBoss(int maxHp, float speed, int damage, float attackInterval, std::string texid);
 	void SpawnItems(int count);
 };
-

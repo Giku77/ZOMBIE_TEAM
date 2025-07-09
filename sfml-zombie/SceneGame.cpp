@@ -84,6 +84,8 @@ void SceneGame::Enter() {
 	ZombieRemaining = 0;
 	SpawnTimer = 0;
 	SpawnInterval = 1.f;
+	ItemSpawnTimer = 0.f;
+	ItemSpawnInterval = 2.f;
 
 	Scene::Enter();
 
@@ -93,6 +95,14 @@ void SceneGame::Enter() {
 
 void SceneGame::Update(float dt)
 {
+	//아이템 랜덤소환
+	ItemSpawnTimer += dt;
+	if (ItemSpawnTimer >= ItemSpawnInterval+ WaveCount*3)//0초가 dt값받아서 늘어나다가 2초넘어가면 스탑
+	{
+		ItemSpawnTimer = 0.f;
+		SpawnItems(Utils::RandomRange(1, 3) + 3 * WaveCount);
+	}
+	
 	cursor.setPosition(ScreenToUi(InputMgr::GetMousePosition()));
 	uihud->SetLevelBar(player->getPer());
 	uihud->SetHp(player->getHp());
@@ -118,7 +128,6 @@ void SceneGame::Update(float dt)
 	if (ZombieRemaining <= 0)
 	{
 		WaveCount++;
-
 		ZombieToSpawn = 10 + WaveCount * 3;
 		ZombieSpawned = ZombieToSpawn;
 		ZombieRemaining = ZombieToSpawn;
@@ -127,9 +136,9 @@ void SceneGame::Update(float dt)
 		{
 			SpawnBoss(500, 200.f, 20.f, 0.8f, "graphics/bloater.png");
 		}
-		SpawnItems(5+3*WaveCount);
 		if (tilemap != nullptr)
 		{
+			if (WaveCount <= 4)
 			if (WaveCount <= 4)
 			{
 				tilemap->Set({ 12 + WaveCount * 4,12 + WaveCount * 4 }, { 50.f,50.f });
@@ -173,8 +182,6 @@ void SceneGame::SpawnZombies(int count)
 	for (int i = 0; i < count; i++)
 	{
 		Zombie* zombie = nullptr;
-		Item* item = nullptr;
-		item = (Item*)AddGameObject(new Item("Item"));
 
 		if (zombiePool.empty()) {
 			zombie = (Zombie*)AddGameObject(new Zombie());
@@ -190,7 +197,7 @@ void SceneGame::SpawnZombies(int count)
 
 		zombie->Reset();
 
-		if (WaveCount < 4)
+		if (WaveCount <= 4)
 		{
 
 			zombie->SetPosition(Utils::RandomPointInRect({ -250.f,-250.f,
@@ -234,12 +241,16 @@ void SceneGame::SpawnItems(int count)
 
 		item->Reset();
 
-		if (WaveCount < 4)
+		if (WaveCount <= 4)
 		{
 			item->SetPosition(Utils::RandomPointInRect({ -250.f, -250.f,500.f + (WaveCount) * 200,
 					500.f + (WaveCount) * 200 }));
 		}
-
+		if (WaveCount > 4)
+		{
+			item->SetPosition(Utils::RandomPointInRect({ -300.f,-300.f,
+				1400.f, 1400.f }));
+		}
 		itemList.push_back(item);
 	}
 }

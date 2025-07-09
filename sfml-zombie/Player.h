@@ -57,8 +57,8 @@ public:
 	void SetisAz(bool r) { isAz = r; }
 	bool GetisAz() { return isAz; }
 
-	void SetAmmo(int a) { 
-		maxAmmo += a; 
+	void SetAmmo(int a) {
+		maxAmmo += a;
 		if (maxAmmo > 100) maxAmmo = 100;
 	}
 	int GetAmmo() const { return ammo; }
@@ -102,4 +102,3 @@ public:
 	}
 	void OnDamage(int d);
 };
-

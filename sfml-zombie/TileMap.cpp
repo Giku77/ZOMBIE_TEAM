@@ -9,7 +9,7 @@ TileMap::TileMap(const std::string& name)
 sf::FloatRect TileMap::GetBounds() const
 {
 	return sf::FloatRect(
-		-origin + position,  
+		-origin + position,
 		sf::Vector2f(cellCount.x * cellSize.x, cellCount.y * cellSize.y)
 	);
 }

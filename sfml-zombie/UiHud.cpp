@@ -45,7 +45,7 @@ void UiHud::AddFontId(const sf::String fontId)
 {
 	if (!font.loadFromFile("fonts/zombiecontrol.ttf"))
 	{
-		std::cout << "í°íŠ¸ ë¡œë“œ ë¶ˆê°€" << std::endl;
+		std::cout << "?°?Š¸ ë¡œë“œ ë¶ˆê??" << std::endl;
 	}
 	//for (int i =0; i<500; i++)
 	//{
@@ -157,4 +157,3 @@ void UiHud::Draw(sf::RenderWindow& window)
 		window.draw(v);
 	}
 }
-

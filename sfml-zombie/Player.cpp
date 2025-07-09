@@ -3,9 +3,15 @@
 #include "SceneGame.h"
 #include "Bullet.h"
 #include "TileMap.h"
+#include "TileMap.h"
 
 Player::Player(const std::string& name)
 	:GameObject(name)
+{
+}
+
+Player::Player(const std::string& name, TileMap* t)
+	:GameObject(name), tile(t)
 {
 }
 
@@ -99,6 +105,7 @@ void Player::Update(float dt)
 		dir.x = InputMgr::GetAxis(Axis::Horizontal);
 		dir.y = InputMgr::GetAxis(Axis::Vertical);
 		prevPos = GetPosition();
+		prevPos = GetPosition();
 
 		if (Utils::Magnitude(dir) > 1.f) {
 			Utils::Normalize(dir); //대각선 이동에서 정규화로 1로 크기 조절 필요
@@ -133,7 +140,7 @@ void Player::Update(float dt)
 		isAz = false;
 	}*/
 
-	
+
 	//Rot
 	sf::Vector2i mousePos = InputMgr::GetMousePosition();
 
@@ -174,8 +181,8 @@ void Player::Draw(sf::RenderWindow& window)
 
 void Player::shoot()
 {
-	std::cout << "플레이어의 총알 : " << ammo <<  " / " << maxAmmo << std::endl;
-	std::cout << "플레이어의 레벨 : " << level <<  std::endl;
+	std::cout << "플레이어의 총알 : " << ammo << " / " << maxAmmo << std::endl;
+	std::cout << "플레이어의 레벨 : " << level << std::endl;
 	std::cout << "플레이어의 경험치 : " << exp << " / " << nextExp << std::endl;
 	std::cout << "플레이어의 경험치 퍼센트 : " << showPer << std::endl;
 	if (ammo > 0) {

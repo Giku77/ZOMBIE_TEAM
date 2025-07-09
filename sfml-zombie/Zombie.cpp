@@ -202,7 +202,7 @@ void Zombie::OnDamage(int d)
 {
 	hp = Utils::Clamp(hp - d, 0, maxHp);
 	std::cout << "좀비의 체력 : " << hp << std::endl;
-	if (hp <= 250.f && type == Types::Boss && !isUseAZ) {
+	if (hp >= 250.f && type == Types::Boss && !isUseAZ) {
 		if (player != nullptr && !player->GetisAz()) {
 			player->SetisAz(true);
 			speed = 100.f;
@@ -230,6 +230,7 @@ void Zombie::OnDie()
 	blood->SetPosition(GetPosition());
 	blood->SetOrigin(Origins::MC);
 	SCENE_MGR.GetCurrentScene()->AddGameObject(blood);
+
 	SceneGame* sceneGame = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene());
 	if (sceneGame)
 		sceneGame->OnZombieKilled();
