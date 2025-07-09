@@ -28,9 +28,10 @@ void SceneGame::Init() {
 	texIds.push_back("graphics/health_pickup.png");
 	texIds.push_back("graphics/speed_pickup.png");
 
-	tilemap =(TileMap*)AddGameObject(new TileMap("TileMap"));
+	tilemap = (TileMap*)AddGameObject(new TileMap("TileMap"));
 
 	player = (Player*)AddGameObject(new Player("Player"));
+
 
 	for (int i = 0; i < 100; i++) {
 		Zombie* zombie = (Zombie*)AddGameObject(new Zombie());
@@ -109,21 +110,36 @@ void SceneGame::Update(float dt)
 			++it;
 		}
 	}
-	
+
 
 	// ¿þÀÌºê Å¬¸®¾î ÈÄ ½ÃÀÛ
-	if (ZombieRemaining <= 0) 
+	if (ZombieRemaining <= 0)
 	{
-		if (tilemap != nullptr)
-		{
-			tilemap->Set({ 12 + WaveCount * 4,12 + WaveCount * 4 }, { 50.f,50.f });
-			player->SetPosition({ 0.f+WaveCount *100, 0.f+ WaveCount * 100 });
-		}
 		WaveCount++;
+
 		ZombieToSpawn = 10 + WaveCount * 3;
 		ZombieSpawned = ZombieToSpawn;
 		ZombieRemaining = ZombieToSpawn;
 		SpawnZombies(ZombieSpawned);
+		if (WaveCount % 5 == 0)
+		{
+			SpawnBoss(500, 200.f, 20.f, 0.8f, "graphics/bloater.png");
+		}
+		SpawnItems(5+3*WaveCount);
+		if (tilemap != nullptr)
+		{
+			if (WaveCount < 4)
+			{
+				tilemap->Set({ 12 + WaveCount * 4,12 + WaveCount * 4 }, { 50.f,50.f });
+				player->SetPosition({ 0.f + WaveCount * 100, 0.f + WaveCount * 100 });
+			}
+			if (WaveCount > 4)
+			{
+				tilemap->Set({ 28,28 }, { 50.f,50.f });
+				player->SetPosition({ 400.f, 400.f });
+			}
+
+		}
 
 
 
@@ -153,10 +169,6 @@ void SceneGame::Update(float dt)
 		std::cout << "ï¿½ï¿½ï¿? È®ï¿½ï¿½" << std::endl;
 	}*/
 
-	if (InputMgr::GetKeyDown(sf::Keyboard::Space)) {
-		SpawnZombies(10);
-		std::cout << "ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ : " << zombieList.size() << std::endl;
-	}
 
 	if (InputMgr::GetKeyDown(sf::Keyboard::LShift)) {
 		SpawnItems(15);
@@ -170,13 +182,18 @@ void SceneGame::Update(float dt)
 		SCENE_MGR.ChangeScene(SceneIds::Title);
 	}
 
-	
+
 }
 
 void SceneGame::SpawnZombies(int count)
 {
-	for (int i = 0; i < count; i++) {
+
+	for (int i = 0; i < count; i++)
+	{
 		Zombie* zombie = nullptr;
+		Item* item = nullptr;
+		item = (Item*)AddGameObject(new Item("Item"));
+
 		if (zombiePool.empty()) {
 			zombie = (Zombie*)AddGameObject(new Zombie());
 			zombie->Init();
@@ -189,11 +206,15 @@ void SceneGame::SpawnZombies(int count)
 
 		zombie->SetType((Zombie::Types)Utils::RandomRange(0, Zombie::TotalTypes));
 
-		zombie->Reset();	
+		zombie->Reset();
 
-		zombie->SetPosition(Utils::RandomPointInRect({ -300.f,-300.f, 
-			600.f+ (WaveCount-1) * 200, 600.f + (WaveCount - 1) * 200 }));
-	
+		if (WaveCount < 4)
+		{
+
+			zombie->SetPosition(Utils::RandomPointInRect({ -300.f,-300.f,
+				600.f + (WaveCount) * 200, 600.f + (WaveCount) * 200 }));
+
+		}
 
 		zombieList.push_back(zombie);
 	}
@@ -231,7 +252,11 @@ void SceneGame::SpawnItems(int count)
 
 		item->Reset();
 
-		item->SetPosition(Utils::RandomInUnitCircle() * 1000.f);
+		if (WaveCount < 4)
+		{
+			item->SetPosition(Utils::RandomPointInRect({ -300.f, -300.f,600.f + (WaveCount) * 200,
+					600.f + (WaveCount) * 200 }));
+		}
 
 		itemList.push_back(item);
 	}
@@ -242,7 +267,7 @@ void SceneGame::OnZombieKilled()
 	ZombieRemaining--;
 }
 
-void SceneGame::Draw(sf::RenderWindow& window) 
+void SceneGame::Draw(sf::RenderWindow& window)
 {
 	Scene::Draw(window);
 

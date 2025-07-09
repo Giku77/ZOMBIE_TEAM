@@ -166,7 +166,7 @@ void Player::shoot()
 			bullet->SetActive(true);
 		}
 		bullet->Reset();
-		bullet->Fire(position + look * 10.f, look, 1000.f, 10);
+		bullet->Fire(position + look * 10.f, look, 1000.f, 200);
 
 		bulletList.push_back(bullet);
 		sceneGame->AddGameObject(bullet);
