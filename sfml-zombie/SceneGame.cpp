@@ -30,7 +30,7 @@ void SceneGame::Init() {
 
 	tilemap =(TileMap*)AddGameObject(new TileMap("TileMap"));
 
-	player = (Player*)AddGameObject(new Player("Player"));
+	player = (Player*)AddGameObject(new Player("Player", tilemap));
 
 	for (int i = 0; i < 100; i++) {
 		Zombie* zombie = (Zombie*)AddGameObject(new Zombie());
@@ -69,7 +69,6 @@ void SceneGame::Exit() {
 	}
 	itemList.clear();
 
-	std::cout << "zombiePool�� ������ : " << zombiePool.size() << std::endl;
 
 	Scene::Exit();
 }
@@ -97,6 +96,10 @@ void SceneGame::Update(float dt)
 {
 	cursor.setPosition(ScreenToUi(InputMgr::GetMousePosition()));
 	uihud->SetLevelBar(player->getPer());
+	uihud->SetHp(player->getHp());
+	uihud->SetLevel(player->getLv());
+	uihud->SetWave(WaveCount);
+	uihud->Update(dt);
 	Scene::Update(dt);
 
 	auto it = zombieList.begin();
@@ -131,27 +134,16 @@ void SceneGame::Update(float dt)
 	}
 	worldView.setCenter(player->GetPosition());
 
-	/*for (auto w : tile->wallRects) {
-		sf::FloatRect transformedRect = Utils::TransformRect(tile->GetTransform(), w);
+	//for (auto w : tilemap->wallRects) {
+	//	sf::FloatRect transformedRect = Utils::TransformRect(tilemap->GetTransform(), w);
 
-		if (transformedRect.intersects(player->GetGlobalBounds())) {
-			std::cout << "�浹 ����" << std::endl;
-		}
-	}*/
+	//	//sf::Vector2f playerPos;
+	//	if (transformedRect.intersects(player->GetGlobalBounds())) {
+	//		//player->SetPosition(playerPos);
+	//	}
+	//	//else playerPos = player->GetPosition();
+	//}
 
-	/*sf::Vector2f nextPos = player->GetPosition();
-	if (tile->GetBounds().contains(nextPos))
-	{
-		player->SetPosition(nextPos);
-	}*/
-	/*sf::FloatRect playerBounds = player->GetGlobalBounds();
-	sf::FloatRect mapBounds = tile->GetBounds();
-
-	if (mapBounds.contains(playerBounds.left, playerBounds.top) &&
-		mapBounds.contains(playerBounds.left + playerBounds.width, playerBounds.top + playerBounds.height))
-	{
-		std::cout << "���? Ȯ��" << std::endl;
-	}*/
 
 	if (InputMgr::GetKeyDown(sf::Keyboard::Space)) {
 		SpawnZombies(10);

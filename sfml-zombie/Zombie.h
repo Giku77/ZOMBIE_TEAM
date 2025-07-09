@@ -4,6 +4,8 @@
 
 class Player;
 class SpriteGo;
+class TileMap;
+
 class Zombie : public GameObject
 {
 public:
@@ -24,6 +26,7 @@ protected:
 	//Status status;
 	Player* player = nullptr;
 
+	TileMap* tile = nullptr;
 
 	sf::Sprite body;
 
@@ -53,6 +56,8 @@ protected:
 	HitBox hitbox;
 
 	bool isUseAZ = false;
+	bool collided = false;
+	sf::Vector2f prevPos;
 
 public:
 	Zombie(const std::string& name = "");
