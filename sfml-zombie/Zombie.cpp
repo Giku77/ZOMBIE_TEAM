@@ -203,7 +203,7 @@ void Zombie::OnDamage(int d)
 {
 	hp = Utils::Clamp(hp - d, 0, maxHp);
 	std::cout << "좀비의 체력 : " << hp << std::endl;
-	if (hp >= 250.f && type == Types::Boss && !isUseAZ) {
+	if (hp <= 250.f && type == Types::Boss && !isUseAZ) {
 		if (player != nullptr && !player->GetisAz()) {
 			player->SetisAz(true);
 			speed = 100.f;

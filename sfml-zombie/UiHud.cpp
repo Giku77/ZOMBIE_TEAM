@@ -45,7 +45,7 @@ void UiHud::AddFontId(const sf::String fontId)
 {
 	if (!font.loadFromFile("fonts/zombiecontrol.ttf"))
 	{
-		std::cout << "?��?�� 로드 불�??" << std::endl;
+		std::cout << "?��?�� 로드 불�??" << std::endl;
 	}
 	//for (int i =0; i<500; i++)
 	//{
@@ -59,16 +59,30 @@ void UiHud::AddMessage(const sf::String Message)
 	textString.push_back(Message);
 }
 
-void UiHud::SetHpBar(int mHp, sf::Vector2f p)
+void UiHud::SetHpBar(int currentHp, int maxHp, const sf::Vector2f& pos)
 {
 	monsterHpBars.clear();
-	monsterHp = mHp;
-	
-	sf::RectangleShape monsterHpBar;
-	sf::Vector2f hpBarSize = { static_cast<float>(monsterHp), 20.f };
-	monsterHpBar.setPosition(p);
-	monsterHpBar.setFillColor(sf::Color::Red);
-	monsterHpBars.push_back(monsterHpBar);
+
+	if (currentHp <= 0)
+		return;
+
+	const float barWidth = 100.f;   
+	const float barHeight = 10.f;
+	float hpPercent = Utils::Clamp01(static_cast<float>(currentHp) / static_cast<float>(maxHp));
+
+	// ��� (ȸ��) ü�¹�
+	sf::RectangleShape backgroundBar;
+	backgroundBar.setSize({ barWidth, barHeight });
+	backgroundBar.setFillColor(sf::Color(50, 50, 50)); // ��ο� ȸ��
+	backgroundBar.setPosition(pos + sf::Vector2f(-barWidth / 2.f, -50.f)); // ��ü �������� ������
+	monsterHpBars.push_back(backgroundBar);
+
+	// ���� ü�� (������) ü�¹�
+	sf::RectangleShape hpBar;
+	hpBar.setSize({ barWidth * hpPercent, barHeight });
+	hpBar.setFillColor(sf::Color::Red);
+	hpBar.setPosition(backgroundBar.getPosition());
+	monsterHpBars.push_back(hpBar);
 }
 
 void UiHud::SetLevelBar(float l)
@@ -108,7 +122,7 @@ void UiHud::Init()
 	hpText.setPosition({ FRAMEWORK.GetWindowBounds().left + 50.f,FRAMEWORK.GetWindowBounds().top + 50.f });
 	levelText.setPosition({ FRAMEWORK.GetWindowBounds().left + 50.f,FRAMEWORK.GetWindowBounds().height - 100.f });
 	bulletText.setPosition({ FRAMEWORK.GetWindowBounds().left + 50.f,FRAMEWORK.GetWindowBounds().top + 100.f });
-	azText.setPosition({ FRAMEWORK.GetWindowBounds().left + 50.f,FRAMEWORK.GetWindowBounds().top + 100.f });
+	azText.setPosition({ FRAMEWORK.GetWindowBounds().width / 2.f - 20.f,FRAMEWORK.GetWindowBounds().top + 300.f });
 
 	waveText.setCharacterSize(40);
 	hpText.setCharacterSize(40);
@@ -120,13 +134,15 @@ void UiHud::Init()
 	hpText.setFillColor(sf::Color::White);
 	levelText.setFillColor(sf::Color::White);
 	bulletText.setFillColor(sf::Color::White);
+	azText.setFillColor(sf::Color::White);
 
 	texts.push_back(waveText);
 	texts.push_back(hpText);
 	texts.push_back(levelText);
 	texts.push_back(bulletText);
+	texts.push_back(azText);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < texts.size(); i++)
 	{
 		texts[i].setFont(font);
 	}
@@ -146,6 +162,9 @@ void UiHud::Update(float dt)
 	texts[1].setString("hp:" + std::to_string(hp));
 	texts[2].setString("level:" + std::to_string(level));
 	texts[3].setString("bullet:" + std::to_string(bullet) + "/"+std::to_string(maxBullet));
+	if (InputMgr::isTyping) {
+		texts[4].setString(InputMgr::Getshuffled());
+	} else texts[4].setString("");
 }
 
 void UiHud::Draw(sf::RenderWindow& window)
@@ -158,5 +177,10 @@ void UiHud::Draw(sf::RenderWindow& window)
 	for (auto v : levelBar)
 	{
 		window.draw(v);
+	}
+
+	for (auto s : monsterHpBars) 
+	{
+		window.draw(s);
 	}
 }

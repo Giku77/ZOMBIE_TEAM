@@ -61,7 +61,7 @@ public:
 	void AddFontId(const sf::String id);
 	void AddMessage(const sf::String Message);
 
-	void SetHpBar(int mHp, sf::Vector2f p);
+	void SetHpBar(int currentHp, int maxHp, const sf::Vector2f& pos);
 	void SetLevelBar(float l);
 	void SetLevel(int l) { level = l; };
 	void SetHp(int l) { hp = l; };

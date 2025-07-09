@@ -64,6 +64,9 @@ public:
 	Zombie(int maxHp, float speed, int damage, float attackInterval, std::string texid);
 	virtual ~Zombie() = default;
 
+	int GetHp() const { return hp; }
+	int GetMaxHp() const { return maxHp; }
+
 	void SetPosition(const sf::Vector2f& pos) override;
 	void SetRotation(float rot) override;
 	void SetScale(const sf::Vector2f& s) override;
