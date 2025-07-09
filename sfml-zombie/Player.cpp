@@ -66,6 +66,9 @@ void Player::Reset()
 	level = 1;
 	exp = 0.f;
 	nextExp = 100.f;
+	speed = 500.f;
+	isAz = false;
+	InputMgr::isTyping = false;
 }
 
 void Player::Update(float dt)
@@ -81,27 +84,32 @@ void Player::Update(float dt)
 		}
 	}
 
-
+	//std::cout << "플레이어 위치: " << GetPosition().x << " / " << GetPosition().y << std::endl;
 	//Pos
 	if (!isAz) {
 		dir.x = InputMgr::GetAxis(Axis::Horizontal);
 		dir.y = InputMgr::GetAxis(Axis::Vertical);
+
+		if (Utils::Magnitude(dir) > 1.f) {
+			Utils::Normalize(dir); //대각선 이동에서 정규화로 1로 크기 조절 필요
+		}
+
+		SetPosition(position + dir * speed * dt);
 	}
 	else {
-		dir = { 0.f, 0.f };
-		InputMgr::isTyping = true;
+		//dir = { 0.f, 0.f };
+		if (!InputMgr::isTyping) {
+			std::cout << "==== 특정 패턴 진입 ====" << std::endl;
+			std::cout << "입력 : " << InputMgr::Getshuffled() << std::endl;
+			InputMgr::isTyping = true;
+		}
 	}
 	
-	if (!InputMgr::isTyping) {
+	/*if (!InputMgr::isTyping) {
 		isAz = false;
-	}
+	}*/
 
-	if (Utils::Magnitude(dir) > 1.f) {
-		Utils::Normalize(dir); //대각선 이동에서 정규화로 1로 크기 조절 필요
-	}
-
-	SetPosition(position + dir * speed * dt);
-
+	
 	//Rot
 	sf::Vector2i mousePos = InputMgr::GetMousePosition();
 
@@ -119,9 +127,11 @@ void Player::Update(float dt)
 		shoot();
 	}
 	if (InputMgr::GetKeyDown(sf::Keyboard::R)) {
+		int sumAmmo = 30 - ammo;
 		ammo += maxAmmo;
 		if (ammo > 30) ammo = 30;
-		maxAmmo -= ammo;
+		maxAmmo -= sumAmmo;
+		if (maxAmmo < 0) maxAmmo = 0;
 	}
 
 	if (exp > nextExp) {
@@ -129,6 +139,7 @@ void Player::Update(float dt)
 		exp -= nextExp;
 		nextExp = 100 * pow(1.15, level - 1);
 	}
+	showPer = (exp / nextExp) * 100.f;
 }
 
 void Player::Draw(sf::RenderWindow& window)
@@ -142,6 +153,7 @@ void Player::shoot()
 	std::cout << "플레이어의 총알 : " << ammo <<  " / " << maxAmmo << std::endl;
 	std::cout << "플레이어의 레벨 : " << level <<  std::endl;
 	std::cout << "플레이어의 경험치 : " << exp << " / " << nextExp << std::endl;
+	std::cout << "플레이어의 경험치 퍼센트 : " << showPer << std::endl;
 	if (ammo > 0) {
 		Bullet* bullet = nullptr;
 		if (bulletPool.empty()) {

@@ -47,6 +47,8 @@ public:
 	static sf::Vector2f Lerp(const sf::Vector2f& min, const sf::Vector2f& max, float t, bool clamp = true);
 	static sf::Color Lerp(const sf::Color& min, const sf::Color& max, float t, bool clamp = true);
 
+	static sf::FloatRect TransformRect(const sf::Transform& t, const sf::FloatRect& r);
+
 	static float RadianToDegree(float radian);
 	static float DegreeToRadian(float degree);
 

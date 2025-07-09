@@ -3,7 +3,7 @@
 #include "TextGo.h"
 
 class UiHud :
-    public GameObject
+	public GameObject
 {
 protected:
 	std::vector<TextGo> texts;
@@ -11,10 +11,27 @@ protected:
 	std::vector<sf::Vector2f> textPos;
 	std::vector<sf::String> textString;
 
+	std::vector<sf::RectangleShape>levelBar;
+	std::vector<sf::RectangleShape>hpBar;
+
+	sf::RectangleShape levelBarHanKan;
+
+	sf::Vector2f levelBarSize;
+	sf::Vector2f hpBarSize;
+
+	sf::Vector2f levelpos;
+
 	std::string fontId;
 	sf::Font font;
 
+	float levelguage = 0.f;
+	float nextlevel = 0.f;
+	int level = 0;
+	int levelBarDrawCount = 0;
+
 	bool isShowMessage;
+	bool isShowLevel;
+
 
 public:
 	UiHud(const std::string& name = "");
@@ -29,6 +46,8 @@ public:
 	void SetCharacterSize(int size);
 	void AddFontId(const sf::String id);
 	void AddMessage(const sf::String Message);
+
+	void SetLevelBar(float l);
 
 	void Init() override;
 	void Release() override;

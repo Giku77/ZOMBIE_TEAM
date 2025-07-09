@@ -30,13 +30,18 @@ protected:
 	int ammo = 0;
 	int maxAmmo = 0;
 
+
 	int level = 1;
 	float exp = 0.f;
 	float nextExp = 100.f;
 
+	float showPer = 0.f;
+
 	bool isAz = false;
 
 public:
+	sf::Vector2f velocity = dir * speed;
+	float getPer() const { return showPer; }
 	bool isAlive() const { return hp > 0; }
 
 	void AddExp(float f) { exp += f; }
@@ -82,6 +87,9 @@ public:
 	void heal(int h) {
 		hp += h;
 		if (hp > maxHp) hp = maxHp;
+	}
+	void AddSpeed(float s) {
+		speed += s;
 	}
 	void OnDamage(int d);
 };

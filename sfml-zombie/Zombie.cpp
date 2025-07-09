@@ -82,6 +82,7 @@ void Zombie::Reset()
 
 	hp = maxHp;
 	attackTimer = 0.f;
+	isUseAZ = false;
 }
 
 void Zombie::Update(float dt)
@@ -139,13 +140,13 @@ void Zombie::SetType(Types type)
 		damage = 5.f;
 		attackInterval = 1.f;
 		break;
-	case Types::Boss:
-		texId = "graphics/bloater.png";
-		maxHp = 500;
-		speed = 200.f;
-		damage = 20.f;
-		attackInterval = 0.8f;
-		break;
+	//case Types::Boss:
+	//	/*texId = "graphics/bloater.png";
+	//	maxHp = 500;
+	//	speed = 200.f;
+	//	damage = 10.f;
+	//	attackInterval = 0.8f;*/
+	//	break;
 	default:
 		//std::cout << "스피드 : " << speed << std::endl;
 		break;
@@ -158,10 +159,11 @@ void Zombie::OnDamage(int d)
 {
 	hp = Utils::Clamp(hp - d, 0, maxHp);
 	std::cout << "좀비의 체력 : " << hp << std::endl;
-	if (hp <= 250.f && type == Types::Boss) {
+	if (hp <= 250.f && type == Types::Boss && !isUseAZ) {
 		if (player != nullptr && !player->GetisAz()) {
 			player->SetisAz(true);
 			speed = 100.f;
+			isUseAZ = true;
 		}
 	}
 	if (hp == 0) {

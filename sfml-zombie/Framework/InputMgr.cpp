@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "InputMgr.h"
+#include "Player.h"
 
 std::list<int> InputMgr::downKeys;
 std::list<int> InputMgr::heldKeys;
@@ -91,6 +92,8 @@ void InputMgr::UpdateEvent(const sf::Event& ev)
 		if (currentIndex >= shuffled.size()) {
 			std::cout << "정답 입력 완료!\n";
 			isTyping = false;
+			Player* player = (Player*)SCENE_MGR.GetCurrentScene()->FindGameObject("Player");
+			player->SetisAz(false);
 		}
 	}
 }
@@ -192,6 +195,11 @@ bool InputMgr::GetMouseButtonUp(sf::Mouse::Button key)
 bool InputMgr::GetMouseButton(sf::Mouse::Button key)
 {
 	return Contains(heldKeys, sf::Keyboard::KeyCount + key);;
+}
+
+std::string& InputMgr::Getshuffled()
+{
+	return shuffled;
 }
 
 sf::Vector2i InputMgr::GetMousePosition()

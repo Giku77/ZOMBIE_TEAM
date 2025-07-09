@@ -15,14 +15,6 @@ public:
 		Custom,
 	};
 
-	//struct Status 
-	//{
-	//	int StatusmaxHp = 0;
-	//	float Statusspeed = 0.f;
-	//	int Statusdamage = 0;
-	//	float StatusattackInterval = 0.f;
-	//	std::string texid;
-	//};
 
 	static const int TotalTypes = 3;
 
@@ -47,6 +39,8 @@ protected:
 	float customSpeed = 0.f;
 
 	HitBox hitbox;
+
+	bool isUseAZ = false;
 
 public:
 	Zombie(const std::string& name = "");

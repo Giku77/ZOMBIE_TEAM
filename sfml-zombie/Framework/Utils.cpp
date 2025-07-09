@@ -189,6 +189,21 @@ sf::Color Utils::Lerp(const sf::Color& min, const sf::Color& max, float t, bool 
     );
 }
 
+sf::FloatRect Utils::TransformRect(const sf::Transform& t, const sf::FloatRect& r)
+{
+    sf::Vector2f topLeft = t.transformPoint({ r.left, r.top });
+    sf::Vector2f topRight = t.transformPoint({ r.left + r.width, r.top });
+    sf::Vector2f bottomLeft = t.transformPoint({ r.left, r.top + r.height });
+    sf::Vector2f bottomRight = t.transformPoint({ r.left + r.width, r.top + r.height });
+
+    float minX = std::min({ topLeft.x, topRight.x, bottomLeft.x, bottomRight.x });
+    float maxX = std::max({ topLeft.x, topRight.x, bottomLeft.x, bottomRight.x });
+    float minY = std::min({ topLeft.y, topRight.y, bottomLeft.y, bottomRight.y });
+    float maxY = std::max({ topLeft.y, topRight.y, bottomLeft.y, bottomRight.y });
+
+    return sf::FloatRect(minX, minY, maxX - minX, maxY - minY);
+}
+
 float Utils::RadianToDegree(float radian)
 {
     return radian * (180.f / PI);
