@@ -11,6 +11,8 @@ SceneGame::SceneGame()
 }
 
 void SceneGame::Init() {
+	//fontIds.push_back("fonts/zombiecontrol.ttf");
+
 	texIds.push_back("graphics/player.png");
 	texIds.push_back("graphics/background_sheet.png");
 
@@ -35,6 +37,9 @@ void SceneGame::Init() {
 		item->SetActive(false);
 		itemPool.push_back(item);
 	}
+
+	uihud = new UiHud();
+	uihud->Init();
 
 	Scene::Init();
 }
@@ -113,6 +118,8 @@ void SceneGame::Update(float dt)
 	if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace)) {
 		SCENE_MGR.ChangeScene(SceneIds::Title);
 	}
+
+	
 }
 
 void SceneGame::SpawnZombies(int count)
@@ -128,7 +135,6 @@ void SceneGame::SpawnZombies(int count)
 			zombiePool.pop_front();
 			zombie->SetActive(true);
 		}
-
 
 		zombie->SetType((Zombie::Types)Utils::RandomRange(0, Zombie::TotalTypes));
 
@@ -192,4 +198,5 @@ void SceneGame::Draw(sf::RenderWindow& window) {
 
 	window.setView(uiView);
 	window.draw(cursor);
+	uihud->Draw(window);
 }

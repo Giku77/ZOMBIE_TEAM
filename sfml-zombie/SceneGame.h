@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 
+class Uihud;
 class Player;
 class Zombie;
 class Item;
@@ -9,6 +10,7 @@ class SceneGame : public Scene
 protected:
 	Player* player = nullptr;
 	Zombie* boss = nullptr;
+	UiHud* uihud = nullptr;
 
 	std::list<Zombie*> zombieList;
 	std::list<Zombie*> zombiePool;

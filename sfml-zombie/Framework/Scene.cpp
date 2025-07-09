@@ -77,15 +77,14 @@ void Scene::Draw(sf::RenderWindow& window)
 	sortedObjects.sort(DrawOrderComparer());
 
 	window.setView(worldView);
-	bool isUiVeiw = false;
+	bool isUiView = false;
 
 	for (auto obj : sortedObjects)
 	{
-		if (obj->sortingLayer >= SortingLayers::UI && !isUiVeiw) {
+		if (obj->sortingLayer >= SortingLayers::UI && !isUiView) {
 			window.setView(uiView);
-			isUiVeiw = true;
+			isUiView = true;
 		}
-
 
 		if (obj->GetActive())
 		{
