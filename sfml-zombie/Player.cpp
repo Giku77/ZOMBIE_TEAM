@@ -89,7 +89,7 @@ void Player::Update(float dt)
 			++it;
 		}
 	}
- 
+
 
 	//std::cout << "플레이어 위치: " << GetPosition().x << " / " << GetPosition().y << std::endl;
 	//Pos
@@ -126,12 +126,12 @@ void Player::Update(float dt)
 		SetPosition(prevPos);
 		collided = false;
 	}
-	
+
 	/*if (!InputMgr::isTyping) {
 		isAz = false;
 	}*/
 
-	
+
 	//Rot
 	sf::Vector2i mousePos = InputMgr::GetMousePosition();
 
@@ -172,8 +172,8 @@ void Player::Draw(sf::RenderWindow& window)
 
 void Player::shoot()
 {
-	std::cout << "플레이어의 총알 : " << ammo <<  " / " << maxAmmo << std::endl;
-	std::cout << "플레이어의 레벨 : " << level <<  std::endl;
+	std::cout << "플레이어의 총알 : " << ammo << " / " << maxAmmo << std::endl;
+	std::cout << "플레이어의 레벨 : " << level << std::endl;
 	std::cout << "플레이어의 경험치 : " << exp << " / " << nextExp << std::endl;
 	std::cout << "플레이어의 경험치 퍼센트 : " << showPer << std::endl;
 	if (ammo > 0) {
@@ -202,6 +202,6 @@ void Player::OnDamage(int d) {
 	hp = Utils::Clamp(hp - d, 0, maxHp);
 	std::cout << "플레이어의 체력 : " << hp << std::endl;
 	if (!isAlive()) {
-		SCENE_MGR.ChangeScene(SceneIds::Title);
+		SCENE_MGR.ChangeScene(SceneIds::Game);
 	}
 }

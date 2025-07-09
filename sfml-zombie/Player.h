@@ -4,6 +4,8 @@
 
 class SceneGame;
 class Bullet;
+class TileMap;
+
 class Player : public GameObject
 {
 protected:
@@ -12,6 +14,8 @@ protected:
 
 	sf::Vector2f dir;
 	sf::Vector2f look;
+
+	TileMap* tile = nullptr;
 
 	float speed = 500.f;
 
@@ -38,10 +42,14 @@ protected:
 	float showPer = 0.f;
 
 	bool isAz = false;
+	bool collided = false;
+	sf::Vector2f prevPos;
 
 public:
 	sf::Vector2f velocity = dir * speed;
 	float getPer() const { return showPer; }
+	int getLv() const { return level; }
+	int getHp() const { return hp; }
 	bool isAlive() const { return hp > 0; }
 
 	void AddExp(float f) { exp += f; }
@@ -50,13 +58,14 @@ public:
 	void SetisAz(bool r) { isAz = r; }
 	bool GetisAz() { return isAz; }
 
-	void SetAmmo(int a) { 
-		maxAmmo += a; 
+	void SetAmmo(int a) {
+		maxAmmo += a;
 		if (maxAmmo > 100) maxAmmo = 100;
 	}
 	int GetAmmo() const { return ammo; }
 
 	Player(const std::string& name = "");
+	Player(const std::string& name, TileMap* t);
 	~Player() override = default;
 
 	void SetPosition(const sf::Vector2f& pos) override;
@@ -93,4 +102,3 @@ public:
 	}
 	void OnDamage(int d);
 };
-

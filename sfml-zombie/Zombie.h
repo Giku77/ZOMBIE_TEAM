@@ -4,6 +4,8 @@
 
 class Player;
 class SpriteGo;
+class TileMap;
+
 class Zombie : public GameObject
 {
 public:
@@ -24,6 +26,7 @@ protected:
 	//Status status;
 	Player* player = nullptr;
 
+	TileMap* tile = nullptr;
 
 	sf::Sprite body;
 
@@ -36,7 +39,7 @@ protected:
 	int hp = 0;
 	int damage = 0;
 	int hpAdd = 0;
-	
+
 	float attackInterval = 0.f;
 	float attackTimer = 0.f;
 
@@ -44,7 +47,7 @@ protected:
 	float speedAdd = 0.f;
 	float Addtimer = 0.f;
 	float shotTimer = 0.f;
-	
+
 	SpriteGo* blood = nullptr;
 	float bloodTimer = 0.f;
 	bool bloodon = false;
@@ -53,6 +56,8 @@ protected:
 	HitBox hitbox;
 
 	bool isUseAZ = false;
+	bool collided = false;
+	sf::Vector2f prevPos;
 
 public:
 	Zombie(const std::string& name = "");
@@ -84,7 +89,6 @@ public:
 
 	const HitBox& GetHitBox() const { return hitbox; }
 	void OnDamage(int d);
-	void OnDie();// Á×´Â´Ù
+	void OnDie();// ?¡¿¢¥?¢¥?
 	bool IsStunned() const { return shotTimer > 0.f; }
 };
-

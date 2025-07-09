@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "HitBox.h"
 class TileMap :
-    public GameObject
+	public GameObject
 {
 protected:
 	sf::VertexArray va;
@@ -21,7 +21,12 @@ public:
 	virtual ~TileMap() = default;
 
 	sf::FloatRect GetBounds() const;
-	
+
+	const sf::Transform& GetTransform() const
+	{
+		return transform;
+	}
+
 
 	void Set(const sf::Vector2i& c, const sf::Vector2f& s);
 	void UpdateTransform();
@@ -38,4 +43,3 @@ public:
 	void Update(float dt) override;
 	void Draw(sf::RenderWindow& window) override;
 };
-
