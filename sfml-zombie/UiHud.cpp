@@ -94,10 +94,9 @@ void UiHud::SetLevelBar(float l)
 void UiHud::Init()
 {
 	font.loadFromFile("fonts/zombiecontrol.ttf");
-	/*levelBarHanKan.setSize({ 30.f, 15.f });
+	levelBarHanKan.setSize({ 30.f, 15.f });
 	levelBarHanKan.setFillColor(sf::Color::Green);
-	levelpos = { FRAMEWORK.GetWindowBounds().left + 500.f,FRAMEWORK.GetWindowBounds().height - 50.f };
-	levelBarHanKan.setPosition({ levelpos.x,levelpos.y });*/
+	
 	GameOverText.setPosition({ 310.f ,600.f });
 	GameOverText.setCharacterSize(150);
 	GameOverText.setString("Game over");

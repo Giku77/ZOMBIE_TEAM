@@ -206,9 +206,9 @@ void Player::shoot()
 		bullet->Reset();
 		if ((int)SCENE_MGR.getType() == 0) {
 			std::cout << "е╦ют 0" << std::endl;
-			bullet->Fire(position + look * 10.f, look, 2000.f, 200);
+			bullet->Fire(position + look * 10.f, look, 2000.f, 20);
 		}
-		else bullet->Fire(position + look * 10.f, look, 1000.f, 200);
+		else bullet->Fire(position + look * 10.f, look, 1000.f, 20);
 
 		bulletList.push_back(bullet);
 		sceneGame->AddGameObject(bullet);
