@@ -120,7 +120,7 @@ void TileMap::Init()
 {
 	sortingLayer = SortingLayers::Background;
 	sortingOrder = 0;
-	Set({ 50, 50 }, { 50.f, 50.f });
+	Set({ 12, 12 }, { 50.f, 50.f });
 }
 
 void TileMap::Release()
@@ -132,7 +132,7 @@ void TileMap::Reset()
 	texture = &TEXTURE_MGR.Get(spriteSheetId);
 
 	SetOrigin(Origins::MC);
-	SetRotation(45.f);
+	SetRotation(0.f);
 	SetPosition({ 0.f,0.f });
 }
 

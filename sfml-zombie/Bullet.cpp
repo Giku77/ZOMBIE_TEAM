@@ -85,6 +85,7 @@ void Bullet::Update(float dt)
 			//zombie->SetActive(false);
 			SetActive(false);
 			zombie->OnDamage(damage);
+		
 			break;
 		}
 	}

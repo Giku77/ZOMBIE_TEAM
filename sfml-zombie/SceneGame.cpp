@@ -22,9 +22,13 @@ void SceneGame::Init() {
 	texIds.push_back("graphics/crawler.png");
 	texIds.push_back("graphics/crosshair.png");
 	texIds.push_back("graphics/bullet.png");
+	texIds.push_back("graphics/blood.png");
+
 	texIds.push_back("graphics/ammo_pickup.png");
 	texIds.push_back("graphics/health_pickup.png");
 	texIds.push_back("graphics/speed_pickup.png");
+
+	tilemap =(TileMap*)AddGameObject(new TileMap("TileMap"));
 
 	tile = (TileMap*)AddGameObject(new TileMap("TileMap"));
 	player = (Player*)AddGameObject(new Player("Player"));
@@ -38,6 +42,13 @@ void SceneGame::Init() {
 		item->SetActive(false);
 		itemPool.push_back(item);
 	}
+
+	WaveCount = 0;
+	ZombieToSpawn = 10 + WaveCount * 5;
+	ZombieSpawned = 0;
+	ZombieRemaining = 0;
+	SpawnTimer = 0;
+	SpawnInterval = 1.f;
 
 	uihud = new UiHud();
 	uihud->Init();
@@ -99,7 +110,26 @@ void SceneGame::Update(float dt)
 			++it;
 		}
 	}
+	
 
+	// ¿þÀÌºê Å¬¸®¾î ÈÄ ½ÃÀÛ
+	if (ZombieRemaining <= 0) 
+	{
+		if (tilemap != nullptr)
+		{
+			tilemap->Set({ 12 + WaveCount * 4,12 + WaveCount * 4 }, { 50.f,50.f });
+			player->SetPosition({ 0.f+WaveCount *100, 0.f+ WaveCount * 100 });
+		}
+		WaveCount++;
+		ZombieToSpawn = 10 + WaveCount * 3;
+		ZombieSpawned = ZombieToSpawn;
+		ZombieRemaining = ZombieToSpawn;
+		SpawnZombies(ZombieSpawned);
+
+
+
+		std::cout << "Wave " << WaveCount << " ½ÃÀÛ!\n";
+	}
 	worldView.setCenter(player->GetPosition());
 
 	/*for (auto w : tile->wallRects) {
@@ -121,7 +151,7 @@ void SceneGame::Update(float dt)
 	if (mapBounds.contains(playerBounds.left, playerBounds.top) &&
 		mapBounds.contains(playerBounds.left + playerBounds.width, playerBounds.top + playerBounds.height))
 	{
-		std::cout << "ï¿½ï¿½ï¿½ È®ï¿½ï¿½" << std::endl;
+		std::cout << "ï¿½ï¿½ï¿? È®ï¿½ï¿½" << std::endl;
 	}*/
 
 	if (InputMgr::GetKeyDown(sf::Keyboard::Space)) {
@@ -160,9 +190,11 @@ void SceneGame::SpawnZombies(int count)
 
 		zombie->SetType((Zombie::Types)Utils::RandomRange(0, Zombie::TotalTypes));
 
-		zombie->Reset();
+		zombie->Reset();	
 
-		zombie->SetPosition(Utils::RandomInUnitCircle() * 500.f);
+		zombie->SetPosition(Utils::RandomPointInRect({ -300.f,-300.f, 
+			600.f+ (WaveCount-1) * 200, 600.f + (WaveCount - 1) * 200 }));
+	
 
 		zombieList.push_back(zombie);
 	}
@@ -206,7 +238,13 @@ void SceneGame::SpawnItems(int count)
 	}
 }
 
-void SceneGame::Draw(sf::RenderWindow& window) {
+void SceneGame::OnZombieKilled()
+{
+	ZombieRemaining--;
+}
+
+void SceneGame::Draw(sf::RenderWindow& window) 
+{
 	Scene::Draw(window);
 
 	window.setView(uiView);

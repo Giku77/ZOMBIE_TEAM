@@ -3,6 +3,7 @@
 #include "HitBox.h"
 
 class Player;
+class SpriteGo;
 class Zombie : public GameObject
 {
 public:
@@ -25,17 +26,28 @@ protected:
 
 
 	sf::Sprite body;
+
 	std::string texId;
+	std::string texbloodId;
 
 	sf::Vector2f dir;
 
 	int maxHp = 0;
 	int hp = 0;
 	int damage = 0;
+	int hpAdd = 0;
+	
 	float attackInterval = 0.f;
 	float attackTimer = 0.f;
 
 	float speed = 0.f;
+	float speedAdd = 0.f;
+	float Addtimer = 0.f;
+	float shotTimer = 0.f;
+	
+	SpriteGo* blood = nullptr;
+	float bloodTimer = 0.f;
+	bool bloodon = false;
 	float customSpeed = 0.f;
 
 	HitBox hitbox;
@@ -72,5 +84,7 @@ public:
 
 	const HitBox& GetHitBox() const { return hitbox; }
 	void OnDamage(int d);
+	void OnDie();// Á×´Â´Ù
+	bool IsStunned() const { return shotTimer > 0.f; }
 };
 

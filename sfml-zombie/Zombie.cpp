@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "Zombie.h"
 #include "Player.h"
-
+#include "SpriteGo.h"
+#include "Blood.h"
+#include "SceneGame.h"
 Zombie::Zombie(const std::string& name)
 	: GameObject(name)
 {
@@ -57,6 +59,8 @@ void Zombie::Init()
 	sortingLayer = SortingLayers::Foreground;
 	sortingOrder = 0;
 
+
+
 	SetType(type);
 }
 
@@ -82,12 +86,22 @@ void Zombie::Reset()
 
 	hp = maxHp;
 	attackTimer = 0.f;
+	hpAdd = 1;
+	speedAdd = 0.1f;
 	isUseAZ = false;
 }
 
 void Zombie::Update(float dt)
 {
 	//std::cout << "거리 : " << Utils::Distance(player->GetPosition(), GetPosition()) << std::endl;
+
+	if (Utils::Distance(player->GetPosition(), GetPosition()) <= 5 || shotTimer > 0.f) {
+		//speed = 0.f;
+		if (shotTimer > 0.f)
+		{
+
+			shotTimer -= dt;
+		}
 	if (Utils::Distance(player->GetPosition(), GetPosition()) <= 5) {
 		dir = { 0.f, 0.f };
 	}
@@ -105,12 +119,21 @@ void Zombie::Update(float dt)
 			attackTimer = 0.f;
 		}
 	}
+	Addtimer += dt;
+	if (Addtimer > 10.f && Addtimer < 12.f)
+	{
+
+		hpAdd += 10;
+		speed += speedAdd;
+	}
 }
 
 void Zombie::Draw(sf::RenderWindow& window)
 {
 	window.draw(body);
 	hitbox.Draw(window);
+
+
 }
 
 void Zombie::SetType(Types type)
@@ -122,6 +145,8 @@ void Zombie::SetType(Types type)
 	case Types::Bloater:
 		texId = "graphics/bloater.png";
 		maxHp = 200;
+		speed = 5.f;
+		damage = 100.f;
 		speed = 50.f;
 		damage = 10.f;
 		attackInterval = 1.f;
@@ -129,6 +154,8 @@ void Zombie::SetType(Types type)
 	case Types::Chase:
 		texId = "graphics/chaser.png";
 		maxHp = 100;
+		speed = 10.f;
+		damage = 100.f;
 		speed = 100.f;
 		damage = 3.f;
 		attackInterval = 1.f;
@@ -136,6 +163,8 @@ void Zombie::SetType(Types type)
 	case Types::Crawler:
 		texId = "graphics/crawler.png";
 		maxHp = 50;
+		speed = 20.f;
+		damage = 100.f;
 		speed = 200.f;
 		damage = 5.f;
 		attackInterval = 1.f;
@@ -158,6 +187,31 @@ void Zombie::SetType(Types type)
 void Zombie::OnDamage(int d)
 {
 	hp = Utils::Clamp(hp - d, 0, maxHp);
+
+	if (hp == 0)
+	{
+		OnDie();
+	}
+	else
+	{
+		shotTimer = 0.3f;
+	}
+}
+
+void Zombie::OnDie()
+{
+
+	Blood* blood = new Blood();
+	blood->SetTexture("graphics/blood.png");
+	blood->SetPosition(GetPosition());
+	blood->SetOrigin(Origins::MC);
+	SCENE_MGR.GetCurrentScene()->AddGameObject(blood);
+	SceneGame* sceneGame = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene());
+	if (sceneGame)
+		sceneGame->OnZombieKilled();
+	SetActive(false);
+
+}
 	std::cout << "좀비의 체력 : " << hp << std::endl;
 	if (hp <= 250.f && type == Types::Boss && !isUseAZ) {
 		if (player != nullptr && !player->GetisAz()) {
