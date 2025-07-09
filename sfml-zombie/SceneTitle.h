@@ -4,8 +4,6 @@ class SceneTitle :
 	public Scene
 {
 protected:
-	sf::RectangleShape startRect;
-	sf::RectangleShape exitRect;
 	SpriteGo* background1;
 	SpriteGo* background2;
 
@@ -22,8 +20,6 @@ protected:
 
 	bool isExitClick;
 	bool isStartClick;
-	bool isDrawStartRect;
-	bool isDrawExitRect;
 	bool isDrawBackgroundChange;
 
 public:

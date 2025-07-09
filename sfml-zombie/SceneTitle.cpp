@@ -42,8 +42,6 @@ void SceneTitle::Init()
 
 	isExitClick = false;
 	isStartClick = false;
-	isDrawStartRect = false;
-	isDrawExitRect = false;
 	isDrawBackgroundChange = false;
 }
 
@@ -91,15 +89,7 @@ void SceneTitle::Update(float dt)
 		exitText.setFillColor(sf::Color::White);
 		exitText.setScale({ 1.f,1.f });
 	}
-}
 
-void SceneTitle::Draw(sf::RenderWindow& window)
-{
-
-	Scene::Draw(window);
-	window.draw(titleText);
-	window.draw(startText);
-	window.draw(exitText);
 	if (isDrawBackgroundChange)
 	{
 		background1->SetActive(false);
@@ -109,9 +99,19 @@ void SceneTitle::Draw(sf::RenderWindow& window)
 		background1->SetActive(true);
 		background2->SetActive(false);
 	}
+}
+
+void SceneTitle::Draw(sf::RenderWindow& window)
+{
+
+	Scene::Draw(window);
+	window.draw(titleText);
+	window.draw(startText);
+	window.draw(exitText);
+
 	if (isStartClick)
 	{
-		SCENE_MGR.ChangeScene(SceneIds::Game);
+		SCENE_MGR.ChangeScene(SceneIds::Choose);
 		isStartClick = false;
 	}
 
