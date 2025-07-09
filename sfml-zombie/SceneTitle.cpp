@@ -13,57 +13,38 @@ void SceneTitle::Init()
 
 	fontIds.push_back("fonts/zombiecontrol.ttf");
 	texIds.push_back("graphics/background.png");
+	texIds.push_back("graphics/backgroundchange.png");
 	font.loadFromFile("fonts/zombiecontrol.ttf");
 
 	titleText.setFont(font);
-	titleText.setString("ZOMBIE GAME");
-	titleText.setPosition({ 190.f , bounds.top + 200.f });
-	titleText.setCharacterSize(120);
-
-
-	float startTextX = 190.f;
-	float startTextY = bounds.top + 500.f;
+	titleText.setString("ZOMBIE \nGAME");
+	titleText.setPosition({ 90.f , bounds.top + 210.f });
+	titleText.setCharacterSize(150);
+	titleText.setRotation(-10);
 
 	startText.setFont(font);
 	startText.setString("Game Start");
-	startText.setPosition({ 190.f , bounds.top + 500.f });
-	startText.setCharacterSize(120);
+	startText.setPosition({310.f , bounds.top + 600.f });
+	startText.setCharacterSize(80);
 
-	startwidth = startRect.getLocalBounds().width;
-	startHeight = startRect.getLocalBounds().height;
-	startRect.setFillColor(sf::Color::Transparent);
-	startRect.setOutlineColor(sf::Color::Yellow);
-	startRect.setOutlineThickness(1.f);
-	startRect.setSize({ startHeight, startwidth });
-
-	float exitTextX = 190.f;
-	float exitTextY = bounds.top + 800.f;
 	exitText.setFont(font);
 	exitText.setString("Exit");
-	exitText.setPosition({ exitTextX, exitTextY });
-	exitText.setCharacterSize(120);
+	exitText.setPosition({ 430.f ,bounds.top + 800.f });
+	exitText.setCharacterSize(80);
 
-	exitwidth = exitRect.getLocalBounds().width;
-	exitHeight = exitRect.getLocalBounds().height;
-	exitRect.setSize({ exitwidth,exitHeight });
-	exitRect.setPosition({ exitTextX, exitTextY });
-	exitRect.setFillColor(sf::Color::Transparent);
-	exitRect.setOutlineColor(sf::Color::Yellow);
-	exitRect.setOutlineThickness(1.f);
-
-	//uihud = (UiHud*)AddGameObject(new UiHud());
-	//uihud->AddFontId("fonts/zombiecontrol.ttf");
-	//uihud->AddMessage("ZOMBIE GAME");
-	//uihud->SetPosition({ bounds.width * 0.5f, bounds.top - 20.f });
-
-	SpriteGo* backgrounds = new SpriteGo("graphics/background.png", "background");
-	backgrounds->SetTextureId("graphics/background.png");
-	AddGameObject(backgrounds);
+	background1 = new SpriteGo("graphics/background.png", "background");
+	background2 = new SpriteGo("graphics/backgroundchange.png", "background2");
+	background1->SetTextureId("graphics/background.png");
+	background2->SetTextureId("graphics/backgroundchange.png");
+	AddGameObject(background1);
+	AddGameObject(background2);
+	background2->SetActive(false);
 
 	isExitClick = false;
 	isStartClick = false;
 	isDrawStartRect = false;
 	isDrawExitRect = false;
+	isDrawBackgroundChange = false;
 }
 
 void SceneTitle::Enter()
@@ -75,44 +56,14 @@ void SceneTitle::Update(float dt)
 {
 	Scene::Update(dt);
 
-	/*if (
-		InputMgr::GetMousePosition().x >= startRect.getPosition().x - 50.f
-		&& InputMgr::GetMousePosition().x <= startRect.getPosition().x + startwidth + 50.f
-		&& InputMgr::GetMousePosition().y >= startRect.getPosition().y - 50.f
-		&& InputMgr::GetMousePosition().y <= startRect.getPosition().y + startHeight + 50.f
-		)
-	{
-		isDrawStartRect = true;
-		if (InputMgr::GetMouseButtonDown)
-		{
-			isStartClick = true;
-		}
-	}
-
-	if (
-		InputMgr::GetMousePosition().x >= exitRect.getPosition().x - 50.f
-		&& InputMgr::GetMousePosition().x <= exitRect.getPosition().x + exitwidth + 50.f
-		&& InputMgr::GetMousePosition().y >= exitRect.getPosition().y - 50.f
-		&& InputMgr::GetMousePosition().y <= exitRect.getPosition().y + exitHeight + 50.f
-		)
-	{
-		std::cout << exitRect.getPosition().x << ",";
-		std::cout << exitRect.getPosition().y << std::endl;
-		std::cout << "마우스 위치: " << InputMgr::GetMousePosition().x << std::endl;
-		isDrawExitRect = true;
-		if (InputMgr::GetMouseButtonDown)
-		{
-			isExitClick = true;
-		}
-	}*/
-
 	sf::Vector2f mouseWorldPos = FRAMEWORK.GetWindow().mapPixelToCoords(sf::Mouse::getPosition(FRAMEWORK.GetWindow()));
 	bool isStartMouseOver = Utils::PointInTransformBounds(startText, startText.getLocalBounds(), mouseWorldPos);
 	bool isExitMouseOver = Utils::PointInTransformBounds(exitText, exitText.getLocalBounds(), mouseWorldPos);
 
 	if (isStartMouseOver)
 	{
-		startText.setFillColor(sf::Color::Red);
+		isDrawBackgroundChange = true;
+		startText.setFillColor(sf::Color::Yellow);
 		startText.setScale({ 1.1f,1.1f });
 		if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 		{
@@ -121,13 +72,14 @@ void SceneTitle::Update(float dt)
 	}
 	else
 	{
+		isDrawBackgroundChange = false;
 		startText.setFillColor(sf::Color::White);
 		startText.setScale({ 1.f,1.f });
 	}
 
 	if (isExitMouseOver)
 	{
-		exitText.setFillColor(sf::Color::Red);
+		exitText.setFillColor(sf::Color::Yellow);
 		exitText.setScale({ 1.1f,1.1f });
 		if (InputMgr::GetMouseButtonDown(sf::Mouse::Button::Left))
 		{
@@ -148,7 +100,15 @@ void SceneTitle::Draw(sf::RenderWindow& window)
 	window.draw(titleText);
 	window.draw(startText);
 	window.draw(exitText);
-
+	if (isDrawBackgroundChange)
+	{
+		background1->SetActive(false);
+		background2->SetActive(true);
+	}
+	else {
+		background1->SetActive(true);
+		background2->SetActive(false);
+	}
 	if (isStartClick)
 	{
 		SCENE_MGR.ChangeScene(SceneIds::Game);

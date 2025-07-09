@@ -6,6 +6,8 @@ class SceneTitle :
 protected:
 	sf::RectangleShape startRect;
 	sf::RectangleShape exitRect;
+	SpriteGo* background1;
+	SpriteGo* background2;
 
 	sf::Text titleText;
 	sf::Text startText;
@@ -22,6 +24,7 @@ protected:
 	bool isStartClick;
 	bool isDrawStartRect;
 	bool isDrawExitRect;
+	bool isDrawBackgroundChange;
 
 public:
 	SceneTitle();
