@@ -42,9 +42,7 @@ protected:
 	int wavecount;
 
 	int monsterHp;
-	int playerDamage;
 
-	
 	bool isShowMessage;
 	bool isShowLevel;
 
@@ -62,7 +60,7 @@ public:
 	void AddFontId(const sf::String id);
 	void AddMessage(const sf::String Message);
 
-	void SetHpBar(int mHp, int d, sf::Vector2f p);
+	void SetHpBar(int mHp, sf::Vector2f p);
 	void SetLevelBar(float l);
 	void SetLevel(int l) { level = l; };
 	void SetHp(int l) { hp = l; };
