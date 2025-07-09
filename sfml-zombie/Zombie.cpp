@@ -91,49 +91,46 @@ void Zombie::Reset()
 	isUseAZ = false;
 }
 
+
 void Zombie::Update(float dt)
 {
 	//std::cout << "거리 : " << Utils::Distance(player->GetPosition(), GetPosition()) << std::endl;
 
-	if (Utils::Distance(player->GetPosition(), GetPosition()) <= 5 || shotTimer > 0.f) {
+	    if (Utils::Distance(player->GetPosition(), GetPosition()) <= 5 || shotTimer > 0.f) {
 		//speed = 0.f;
 		if (shotTimer > 0.f)
 		{
-
 			shotTimer -= dt;
 		}
-	if (Utils::Distance(player->GetPosition(), GetPosition()) <= 5) {
-		dir = { 0.f, 0.f };
-	}
-	else {
-		dir = Utils::GetNormal(player->GetPosition() - GetPosition());
-		SetRotation(Utils::Angle(dir));
-		SetPosition(GetPosition() + dir * speed * dt);
-	}
-	hitbox.UpdateTransform(body, GetLocalBounds());
-
-	attackTimer += dt;
-	if (attackTimer > attackInterval) {
-		if (Utils::CheckCollision(hitbox.rect, player->GetHitBox().rect)) {
-			player->OnDamage(damage);
-			attackTimer = 0.f;
+			dir = { 0.f, 0.f };
 		}
-	}
-	Addtimer += dt;
-	if (Addtimer > 10.f && Addtimer < 12.f)
-	{
+		else {
+			dir = Utils::GetNormal(player->GetPosition() - GetPosition());
+			SetRotation(Utils::Angle(dir));
+			SetPosition(GetPosition() + dir * speed * dt);
+		}
+		hitbox.UpdateTransform(body, GetLocalBounds());
 
-		hpAdd += 10;
-		speed += speedAdd;
-	}
+		attackTimer += dt;
+		if (attackTimer > attackInterval) {
+			if (Utils::CheckCollision(hitbox.rect, player->GetHitBox().rect)) {
+				player->OnDamage(damage);
+				attackTimer = 0.f;
+			}
+		}
+		Addtimer += dt;
+		if (Addtimer > 10.f && Addtimer < 12.f)
+		{
+
+			hpAdd += 10;
+			speed += speedAdd;
+		}
 }
 
 void Zombie::Draw(sf::RenderWindow& window)
 {
 	window.draw(body);
 	hitbox.Draw(window);
-
-
 }
 
 void Zombie::SetType(Types type)
@@ -187,7 +184,14 @@ void Zombie::SetType(Types type)
 void Zombie::OnDamage(int d)
 {
 	hp = Utils::Clamp(hp - d, 0, maxHp);
-
+	std::cout << "좀비의 체력 : " << hp << std::endl;
+	if (hp <= 250.f && type == Types::Boss && !isUseAZ) {
+		if (player != nullptr && !player->GetisAz()) {
+			player->SetisAz(true);
+			speed = 100.f;
+			isUseAZ = true;
+		}
+	}
 	if (hp == 0)
 	{
 		OnDie();
@@ -200,7 +204,10 @@ void Zombie::OnDamage(int d)
 
 void Zombie::OnDie()
 {
-
+	if (player != nullptr) {
+		player->AddExp(Utils::RandomRange(1.f, 10.f));
+		if (type == Types::Boss) player->AddExp(50.f);
+	}
 	Blood* blood = new Blood();
 	blood->SetTexture("graphics/blood.png");
 	blood->SetPosition(GetPosition());
@@ -212,20 +219,4 @@ void Zombie::OnDie()
 	SetActive(false);
 
 }
-	std::cout << "좀비의 체력 : " << hp << std::endl;
-	if (hp <= 250.f && type == Types::Boss && !isUseAZ) {
-		if (player != nullptr && !player->GetisAz()) {
-			player->SetisAz(true);
-			speed = 100.f;
-			isUseAZ = true;
-		}
-	}
-	if (hp == 0) {
-		if (player != nullptr) {
-			player->AddExp(Utils::RandomRange(1.f, 10.f));
-			if(type == Types::Boss) player->AddExp(50.f);
-		}
-		SetActive(false);
-	}
 
-}

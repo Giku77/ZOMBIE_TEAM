@@ -166,9 +166,6 @@
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="UiHud.cpp" />
     <ClCompile Include="Variables.cpp" />
-    <ClCompile Include="Wave.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -198,9 +195,6 @@
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="UiHud.h" />
     <ClInclude Include="Variables.h" />
-    <ClInclude Include="Wave.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

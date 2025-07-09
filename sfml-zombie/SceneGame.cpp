@@ -30,7 +30,6 @@ void SceneGame::Init() {
 
 	tilemap =(TileMap*)AddGameObject(new TileMap("TileMap"));
 
-	tile = (TileMap*)AddGameObject(new TileMap("TileMap"));
 	player = (Player*)AddGameObject(new Player("Player"));
 
 	for (int i = 0; i < 100; i++) {

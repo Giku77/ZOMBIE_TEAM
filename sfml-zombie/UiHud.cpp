@@ -3,7 +3,6 @@
 
 UiHud::UiHud(const std::string& name)
 	: GameObject(name), texts(0), textPos(0), textString('0'), levelBar(0), hpBar(0), levelBarHanKan({ 0,0 })
-	: GameObject(name), texts(0), textPos(0), textString('0'), levelBar(0), hpBar(0), levelBarHanKan({ 0,0 })
 {
 }
 
@@ -41,9 +40,6 @@ void UiHud::SetCharacterSize(int size)
 {
 }
 
-void UiHud::SetCharacterSize(int size)
-{
-}
 
 void UiHud::AddFontId(const sf::String fontId)
 {

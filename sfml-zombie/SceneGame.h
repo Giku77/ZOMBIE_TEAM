@@ -13,7 +13,6 @@ protected:
 	Player* player = nullptr;
 	TileMap* tilemap = nullptr;
 	Zombie* boss = nullptr;
-	TileMap* tile = nullptr;
 
 	std::list<Zombie*> zombieList;
 	std::list<Zombie*> zombiePool;
