@@ -152,9 +152,9 @@ void UiHud::Draw(sf::RenderWindow& window)
 		window.draw(e);
 	}
 
-	for (auto& bar : monsterHpBars)
+	for (auto v : levelBar)
 	{
-		window.draw(bar);
+		window.draw(v);
 	}
 }
 

@@ -19,6 +19,7 @@ void TileMap::Set(const sf::Vector2i& c, const sf::Vector2f& s)
 	cellCount = c;
 	cellSize = s;
 
+	wallRects.clear();
 	va.clear();
 	va.setPrimitiveType(sf::Quads);
 	va.resize(c.x * c.y * 4);
@@ -130,7 +131,6 @@ void TileMap::Release()
 void TileMap::Reset()
 {
 	texture = &TEXTURE_MGR.Get(spriteSheetId);
-
 	SetOrigin(Origins::MC);
 	SetRotation(0.f);
 	SetPosition({ 0.f,0.f });
@@ -142,7 +142,6 @@ void TileMap::Update(float dt)
 
 void TileMap::Draw(sf::RenderWindow& window)
 {
-	sf::RenderStates state;
 	state.texture = texture;
 	state.transform = transform;
 	window.draw(va, state);

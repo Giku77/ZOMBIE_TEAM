@@ -49,6 +49,7 @@ void Player::Release()
 
 void Player::Reset()
 {
+	tile = (TileMap*)SCENE_MGR.GetCurrentScene()->FindGameObject("TileMap");
 	if (SCENE_MGR.GetCurrentSceneId() == SceneIds::Game) {
 		sceneGame = (SceneGame*)SCENE_MGR.GetCurrentScene();
 	}
@@ -74,6 +75,7 @@ void Player::Reset()
 	nextExp = 100.f;
 	speed = 500.f;
 	isAz = false;
+	collided = false;
 	InputMgr::isTyping = false;
 }
 
