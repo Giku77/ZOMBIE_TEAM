@@ -6,6 +6,9 @@ class SceneChoose :
 protected:
 	SpriteGo* background1;
 	sf::Text choose[6];
+
+	sf::Sprite backgroundSprite;
+	sf::Texture backgroundTexture;
 	/*sf::Text choose2;
 	sf::Text choose3;
 	sf::Text choose4;

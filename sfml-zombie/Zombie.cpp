@@ -105,6 +105,7 @@ void Zombie::Update(float dt)
 			shotTimer -= dt;
 		}
 			dir = { 0.f, 0.f };
+			prevPos = GetPosition();
 		}
 		else {
 			dir = Utils::GetNormal(player->GetPosition() - GetPosition());

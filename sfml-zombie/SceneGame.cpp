@@ -87,16 +87,29 @@ void SceneGame::Enter() {
 	ItemSpawnTimer = 0.f;
 	ItemSpawnInterval = 2.f;
 
+	if (tilemap != nullptr)
+	{
+		tilemap->Set({ 12 + WaveCount * 4, 12 + WaveCount * 4 }, { 50.f, 50.f });
+		player->SetPosition({ WaveCount * 100.f, WaveCount * 100.f }); // WaveCount==0ÀÌ¸é (0,0)
+	}
+
 	Scene::Enter();
 
+	SpawnItems(5);
 	cursor.setTexture(TEXTURE_MGR.Get("graphics/crosshair.png"));
 	Utils::SetOrigin(cursor, Origins::MC);
 }
 
 void SceneGame::Update(float dt)
 {
+	/*if ((int)SCENE_MGR.getType() == 0) {
+		
+	}*/
+
+
 	//¾ÆÀÌÅÛ ·£´ý¼ÒÈ¯
 	ItemSpawnTimer += dt;
+	
 	if (ItemSpawnTimer >= ItemSpawnInterval+ WaveCount*3)//0ÃÊ°¡ dt°ª¹Þ¾Æ¼­ ´Ã¾î³ª´Ù°¡ 2ÃÊ³Ñ¾î°¡¸é ½ºÅ¾
 	{
 		ItemSpawnTimer = 0.f;
@@ -124,7 +137,6 @@ void SceneGame::Update(float dt)
 	}
 
 
-	// ï¿½ï¿½ï¿½Ìºï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	if (ZombieRemaining <= 0)
 	{
 		WaveCount++;
@@ -139,10 +151,9 @@ void SceneGame::Update(float dt)
 		if (tilemap != nullptr)
 		{
 			if (WaveCount <= 4)
-			if (WaveCount <= 4)
 			{
 				tilemap->Set({ 12 + WaveCount * 4,12 + WaveCount * 4 }, { 50.f,50.f });
-				if(WaveCount >= 2) player->SetPosition({ 0.f + WaveCount * 100, 0.f + WaveCount * 100 });
+				player->SetPosition({ 0.f + WaveCount * 100, 0.f + WaveCount * 100 });
 				//std::cout << "ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : " << player->GetPosition().x << " / " << player->GetPosition().y << std::endl;
 			}
 			if (WaveCount > 4)
@@ -155,7 +166,7 @@ void SceneGame::Update(float dt)
 
 
 
-		std::cout << "Wave " << WaveCount << " ï¿½ï¿½ï¿½ï¿½!\n";
+		//std::cout << "Wave " << WaveCount << " ï¿½ï¿½ï¿½ï¿½!\n";
 	}
 	worldView.setCenter(player->GetPosition());
 
@@ -204,6 +215,10 @@ void SceneGame::SpawnZombies(int count)
 				500.f + (WaveCount) * 200, 500.f + (WaveCount) * 200 }));
 
 		}
+		if (WaveCount > 4) {
+			zombie->SetPosition(Utils::RandomPointInRect({ -250.f,-250.f,
+				1300.f, 1300.f }));
+		}
 
 		zombieList.push_back(zombie);
 	}
@@ -238,6 +253,12 @@ void SceneGame::SpawnItems(int count)
 		}
 
 		item->SetType((ItemType::Type)Utils::RandomRange(0, (int)ItemType::Type::Total));
+		if ((int)SCENE_MGR.getType() == 4 && Utils::RandomValue() > 0.5f) {
+			item->SetType(ItemType::Type::Heal);
+		}
+		if ((int)SCENE_MGR.getType() == 5 && Utils::RandomValue() > 0.5f) {
+			item->SetType(ItemType::Type::Ammo);
+		}
 
 		item->Reset();
 

@@ -24,9 +24,12 @@ void SceneChoose::Init()
 	fontIds.push_back("fonts/zombiecontrol.ttf");
 	font.loadFromFile("fonts/zombiecontrol.ttf");
 
-	background1 = new SpriteGo("graphics/background.png", "background");
+	backgroundTexture.loadFromFile("graphics/background.png");
+	backgroundSprite.setTexture(backgroundTexture);
+
+	/*background1 = new SpriteGo("graphics/background.png", "background");
 	background1->SetTextureId("graphics/background.png");
-	AddGameObject(background1);
+	AddGameObject(background1);*/
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -57,26 +60,33 @@ void SceneChoose::Update(float dt)
 		if (HandleTextHover(choose[0], mouseWorldPos))
 		{
 			SCENE_MGR.ChangeScene(SceneIds::Game);
+			SCENE_MGR.setType(0);
+
 		}
 		if (HandleTextHover(choose[1], mouseWorldPos))
 		{
 			SCENE_MGR.ChangeScene(SceneIds::Game);
+			SCENE_MGR.setType(1);
 		}
 		if (HandleTextHover(choose[2], mouseWorldPos))
 		{
 			SCENE_MGR.ChangeScene(SceneIds::Game);
+			SCENE_MGR.setType(2);
 		}
 		if (HandleTextHover(choose[3], mouseWorldPos))
 		{
 			SCENE_MGR.ChangeScene(SceneIds::Game);
+			SCENE_MGR.setType(3);
 		}
 		if (HandleTextHover(choose[4], mouseWorldPos))
 		{
 			SCENE_MGR.ChangeScene(SceneIds::Game);
+			SCENE_MGR.setType(4);
 		}
 		if (HandleTextHover(choose[5], mouseWorldPos))
 		{
 			SCENE_MGR.ChangeScene(SceneIds::Game);
+			SCENE_MGR.setType(5);
 		}
 	}
 }
@@ -88,6 +98,10 @@ void SceneChoose::Exit()
 
 void SceneChoose::Draw(sf::RenderWindow& window)
 {
+	window.setView(window.getDefaultView());
+
+	window.draw(backgroundSprite);
+
 	Scene::Draw(window);
 	for (int i = 0; i < 6; i++)
 	{

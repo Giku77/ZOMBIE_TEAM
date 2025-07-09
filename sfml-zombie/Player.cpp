@@ -15,10 +15,6 @@ Player::Player(const std::string& name, TileMap* t)
 {
 }
 
-Player::Player(const std::string& name, TileMap* t)
-	:GameObject(name), tile(t)
-{
-}
 
 void Player::SetPosition(const sf::Vector2f& pos) {
 	GameObject::SetPosition(pos);
@@ -75,11 +71,13 @@ void Player::Reset()
 	dir = { 0.f, 0.f };
 	look = { 1.0f, 0.f };
 	shootTimer = 0.f;
+	if ((int)SCENE_MGR.getType() == 2) maxHp = 200;
 	hp = maxHp;
 	level = 1;
 	exp = 0.f;
 	nextExp = 100.f;
 	speed = 500.f;
+	if ((int)SCENE_MGR.getType() == 3) speed = 700.f;
 	isAz = false;
 	collided = false;
 	InputMgr::isTyping = false;
@@ -104,7 +102,6 @@ void Player::Update(float dt)
 	if (!isAz) {
 		dir.x = InputMgr::GetAxis(Axis::Horizontal);
 		dir.y = InputMgr::GetAxis(Axis::Vertical);
-		prevPos = GetPosition();
 		prevPos = GetPosition();
 
 		if (Utils::Magnitude(dir) > 1.f) {
@@ -135,6 +132,7 @@ void Player::Update(float dt)
 		SetPosition(prevPos);
 		collided = false;
 	}
+
 	
 	/*if (!InputMgr::isTyping) {
 		isAz = false;
@@ -158,9 +156,18 @@ void Player::Update(float dt)
 		shoot();
 	}
 	if (InputMgr::GetKeyDown(sf::Keyboard::R)) {
-		int sumAmmo = 30 - ammo;
+		int sumAmmo = 0;
+		if ((int)SCENE_MGR.getType() == 1) {
+			sumAmmo = 50 - ammo;
+		}
+		else sumAmmo = 30 - ammo;
 		ammo += maxAmmo;
-		if (ammo > 30) ammo = 30;
+		if ((int)SCENE_MGR.getType() == 1) {
+			if (ammo > 50) ammo = 50;
+		}
+		else {
+			if (ammo > 30) ammo = 30;
+		}
 		maxAmmo -= sumAmmo;
 		if (maxAmmo < 0) maxAmmo = 0;
 	}
@@ -197,7 +204,11 @@ void Player::shoot()
 			bullet->SetActive(true);
 		}
 		bullet->Reset();
-		bullet->Fire(position + look * 10.f, look, 1000.f, 200);
+		if ((int)SCENE_MGR.getType() == 0) {
+			std::cout << "е╦ют 0" << std::endl;
+			bullet->Fire(position + look * 10.f, look, 2000.f, 200);
+		}
+		else bullet->Fire(position + look * 10.f, look, 1000.f, 200);
 
 		bulletList.push_back(bullet);
 		sceneGame->AddGameObject(bullet);

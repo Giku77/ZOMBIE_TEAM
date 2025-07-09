@@ -22,6 +22,12 @@ protected:
 	bool isStartClick;
 	bool isDrawBackgroundChange;
 
+	sf::Sprite backgroundSprite;
+	sf::Texture backgroundTexture;
+
+	sf::Sprite backgroundSprite2;
+	sf::Texture backgroundTexture2;
+
 public:
 	SceneTitle();
 	~SceneTitle() = default;

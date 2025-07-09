@@ -35,6 +35,7 @@ protected:
 	sf::Text hpText;
 	sf::Text waveText;
 	sf::Text bulletText;
+	sf::Text azText;
 
 	sf::Text GameOverText;
 	

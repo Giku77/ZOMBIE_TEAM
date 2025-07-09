@@ -107,11 +107,13 @@ void UiHud::Init()
 	hpText.setPosition({ FRAMEWORK.GetWindowBounds().left + 50.f,FRAMEWORK.GetWindowBounds().top + 50.f });
 	levelText.setPosition({ FRAMEWORK.GetWindowBounds().left + 50.f,FRAMEWORK.GetWindowBounds().height - 100.f });
 	bulletText.setPosition({ FRAMEWORK.GetWindowBounds().left + 50.f,FRAMEWORK.GetWindowBounds().top + 100.f });
+	azText.setPosition({ FRAMEWORK.GetWindowBounds().left + 50.f,FRAMEWORK.GetWindowBounds().top + 100.f });
 
 	waveText.setCharacterSize(40);
 	hpText.setCharacterSize(40);
 	levelText.setCharacterSize(40);
 	bulletText.setCharacterSize(40);
+	azText.setCharacterSize(40);
 
 	waveText.setFillColor(sf::Color::White);
 	hpText.setFillColor(sf::Color::White);

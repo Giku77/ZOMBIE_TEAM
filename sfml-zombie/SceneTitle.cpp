@@ -7,7 +7,6 @@ SceneTitle::SceneTitle()
 
 void SceneTitle::Init()
 {
-	Scene::Init();
 
 	sf::FloatRect bounds = FRAMEWORK.GetWindowBounds();
 
@@ -24,7 +23,7 @@ void SceneTitle::Init()
 
 	startText.setFont(font);
 	startText.setString("Game Start");
-	startText.setPosition({310.f , bounds.top + 600.f });
+	startText.setPosition({ 310.f , bounds.top + 600.f });
 	startText.setCharacterSize(80);
 
 	exitText.setFont(font);
@@ -32,14 +31,22 @@ void SceneTitle::Init()
 	exitText.setPosition({ 430.f ,bounds.top + 800.f });
 	exitText.setCharacterSize(80);
 
-	background1 = new SpriteGo("graphics/background.png", "background");
-	background2 = new SpriteGo("graphics/backgroundchange.png", "background2");
-	background1->SetTextureId("graphics/background.png");
-	background2->SetTextureId("graphics/backgroundchange.png");
-	AddGameObject(background1);
-	AddGameObject(background2);
-	background2->SetActive(false);
+	//background1 = new SpriteGo("graphics/background.png");
+	//background2 = new SpriteGo("graphics/backgroundchange.png");
 
+
+	//FRAMEWORK.GetWindow().setView(FRAMEWORK.GetWindow().getDefaultView());
+	//AddGameObject(background1);
+	//AddGameObject(background2);
+	//background2->SetActive(false);
+	Scene::Init();
+
+	backgroundTexture.loadFromFile("graphics/background.png");
+	backgroundSprite.setTexture(backgroundTexture);
+
+	backgroundTexture2.loadFromFile("graphics/backgroundchange.png");
+	backgroundSprite2.setTexture(backgroundTexture2);
+	//background1->Reset();
 	isExitClick = false;
 	isStartClick = false;
 	isDrawBackgroundChange = false;
@@ -48,6 +55,9 @@ void SceneTitle::Init()
 void SceneTitle::Enter()
 {
 	Scene::Enter();
+	//FRAMEWORK.GetWindow().setView(uiView);
+	sf::Vector2u texSize = TEXTURE_MGR.Get("graphics/background.png").getSize();
+	std::cout << "배경 텍스처 사이즈: " << texSize.x << "x" << texSize.y << std::endl;
 }
 
 void SceneTitle::Update(float dt)
@@ -90,24 +100,33 @@ void SceneTitle::Update(float dt)
 		exitText.setScale({ 1.f,1.f });
 	}
 
-	if (isDrawBackgroundChange)
-	{
-		background1->SetActive(false);
-		background2->SetActive(true);
-	}
-	else {
-		background1->SetActive(true);
-		background2->SetActive(false);
-	}
+	//if (isDrawBackgroundChange)
+	//{
+	//	background1->SetActive(false);
+	//	background2->SetActive(true);
+	//}
+	//else {
+	//	background1->SetActive(true);
+	//	background2->SetActive(false);
+	//}
 }
 
 void SceneTitle::Draw(sf::RenderWindow& window)
 {
+	window.setView(window.getDefaultView());
+
+	if (isDrawBackgroundChange)
+		window.draw(backgroundSprite2);
+	else
+		window.draw(backgroundSprite);
 
 	Scene::Draw(window);
+	//window.setView(uiView);
 	window.draw(titleText);
 	window.draw(startText);
 	window.draw(exitText);
+	//if(!isDrawBackgroundChange) window.draw(backgroundSprite);
+	//else window.draw(backgroundSprite2);
 
 	if (isStartClick)
 	{
