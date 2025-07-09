@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "TileMap.h"
 #include "Zombie.h"
+#include "Item.h"
 
 SceneGame::SceneGame()
 	:Scene(SceneIds::Game)
@@ -18,6 +19,8 @@ void SceneGame::Init() {
 	texIds.push_back("graphics/crawler.png");
 	texIds.push_back("graphics/crosshair.png");
 	texIds.push_back("graphics/bullet.png");
+	texIds.push_back("graphics/ammo_pickup.png");
+	texIds.push_back("graphics/health_pickup.png");
 
 	AddGameObject(new TileMap("TileMap"));
 
@@ -27,6 +30,10 @@ void SceneGame::Init() {
 		Zombie* zombie = (Zombie*)AddGameObject(new Zombie());
 		zombie->SetActive(false);
 		zombiePool.push_back(zombie);
+
+		Item* item = (Item*)AddGameObject(new Item());
+		item->SetActive(false);
+		itemPool.push_back(item);
 	}
 
 	Scene::Init();
@@ -36,11 +43,16 @@ void SceneGame::Exit() {
 	FRAMEWORK.GetWindow().setMouseCursorVisible(true);
 
 	for (auto zombie : zombieList) {
-		//RemoveGameObject(zombie);
 		zombie->SetActive(false);
 		zombiePool.push_back(zombie);
 	}
 	zombieList.clear();
+
+	for (auto item : itemList) {
+		item->SetActive(false);
+		itemPool.push_back(item);
+	}
+	itemList.clear();
 
 	std::cout << "zombiePool의 사이즈 : " << zombiePool.size() << std::endl;
 
@@ -90,8 +102,16 @@ void SceneGame::Update(float dt)
 		std::cout << "남아 있는 좀비 수 : " << zombieList.size() << std::endl;
 	}
 
+	if (InputMgr::GetKeyDown(sf::Keyboard::LShift)) {
+		SpawnItems(15);
+		SpawnBoss(500, 200.f, 20.f, 0.8f, "graphics/bloater.png");
+	}
+
 	if (InputMgr::GetKeyDown(sf::Keyboard::Enter)) {
 		SCENE_MGR.ChangeScene(SceneIds::Game);
+	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace)) {
+		SCENE_MGR.ChangeScene(SceneIds::Title);
 	}
 }
 
@@ -117,6 +137,53 @@ void SceneGame::SpawnZombies(int count)
 		zombie->SetPosition(Utils::RandomInUnitCircle() * 500.f);
 
 		zombieList.push_back(zombie);
+	}
+}
+
+
+void SceneGame::SpawnBoss(int maxHp, float speed, int damage, float attackInterval, std::string texid)
+{
+	if (zombiePool.empty()) {
+		boss = (Zombie*)AddGameObject(new Zombie(maxHp, speed, damage, attackInterval, texid));
+		//boss->ChangeType(Zombie::Types::Boss);
+		boss->Init();
+	}
+	else {
+		boss = zombiePool.front();
+		zombiePool.pop_front();
+		boss->SetActive(true);
+	}
+
+	boss->SetType(Zombie::Types::Boss);
+
+
+	boss->Reset();
+	boss->SetPosition(Utils::RandomInUnitCircle() * 500.f);
+
+	zombieList.push_back(boss);
+}
+
+void SceneGame::SpawnItems(int count)
+{
+	for (int i = 0; i < count; i++) {
+		Item* item = nullptr;
+		if (itemPool.empty()) {
+			item = (Item*)AddGameObject(new Item());
+			item->Init();
+		}
+		else {
+			item = itemPool.front();
+			itemPool.pop_front();
+			item->SetActive(true);
+		}
+
+		item->SetType((ItemType::Type)Utils::RandomRange(0, (int)ItemType::Type::Total));
+
+		item->Reset();
+
+		item->SetPosition(Utils::RandomInUnitCircle() * 1000.f);
+
+		itemList.push_back(item);
 	}
 }
 

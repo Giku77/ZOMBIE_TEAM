@@ -70,6 +70,19 @@ sf::Vector2f Utils::RandomPointInRect(const sf::FloatRect& rect)
         RandomRange(rect.top, rect.top + rect.height));
 }
 
+void Utils::ShuffleString(std::string& str)
+{
+    std::shuffle(str.begin(), str.end(), gen);
+}
+
+sf::Keyboard::Key Utils::CharToKey(char c)
+{
+    if (c >= 'a' && c <= 'z')
+        return static_cast<sf::Keyboard::Key>(c - 'a');
+
+    return sf::Keyboard::Unknown;
+}
+
 
 sf::Vector2f Utils::SetOrigin(sf::Transformable& obj, Origins preset, const sf::FloatRect rect)
 {

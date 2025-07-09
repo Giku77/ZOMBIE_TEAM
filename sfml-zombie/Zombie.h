@@ -11,12 +11,24 @@ public:
 		Bloater,
 		Chase,
 		Crawler,
+		Boss,
+		Custom,
 	};
-	
+
+	//struct Status 
+	//{
+	//	int StatusmaxHp = 0;
+	//	float Statusspeed = 0.f;
+	//	int Statusdamage = 0;
+	//	float StatusattackInterval = 0.f;
+	//	std::string texid;
+	//};
+
 	static const int TotalTypes = 3;
 
 protected:
 	Types type = Types::Bloater;
+	//Status status;
 	Player* player = nullptr;
 
 
@@ -32,11 +44,13 @@ protected:
 	float attackTimer = 0.f;
 
 	float speed = 0.f;
+	float customSpeed = 0.f;
 
 	HitBox hitbox;
 
 public:
 	Zombie(const std::string& name = "");
+	Zombie(int maxHp, float speed, int damage, float attackInterval, std::string texid);
 	virtual ~Zombie() = default;
 
 	void SetPosition(const sf::Vector2f& pos) override;
@@ -52,6 +66,7 @@ public:
 	void Draw(sf::RenderWindow& window) override;
 
 	void SetType(Types type);
+	void ChangeType(Types t) { type = t; }
 
 	sf::FloatRect GetLocalBounds() const override {
 		return body.getLocalBounds();

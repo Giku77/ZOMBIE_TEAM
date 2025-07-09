@@ -20,6 +20,10 @@ public:
 	static sf::Color RandomColor(bool opaque = true);
 	static sf::Vector2f RandomPointInRect(const sf::FloatRect& rect);
 
+	static void ShuffleString(std::string& str);
+
+	static sf::Keyboard::Key CharToKey(char c);
+
 
 	// Origin
 	static sf::Vector2f SetOrigin(sf::Transformable& obj, Origins preset, const sf::FloatRect bound);

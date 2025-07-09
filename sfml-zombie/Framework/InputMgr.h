@@ -26,7 +26,12 @@ private:
 	static std::unordered_map<Axis, AxisInfo> axisInfoMap;
 	static sf::Vector2i mousePosition;
 
+	static std::string shuffled;
+
+	static int currentIndex;
+
 public:
+	static bool isTyping;
 	static void Init();
 	static void Clear();
 
