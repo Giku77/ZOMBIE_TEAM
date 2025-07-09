@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Blood.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Framework\Framework.cpp" />
     <ClCompile Include="Framework\GameObject.cpp" />
@@ -160,9 +161,13 @@
     <ClCompile Include="Framework\Utils.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="Variables.cpp" />
+    <ClCompile Include="Wave.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Blood.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Framework\Framework.h" />
     <ClInclude Include="Framework\Defines.h" />
@@ -183,6 +188,9 @@
     <ClInclude Include="Framework\Utils.h" />
     <ClInclude Include="TileMap.h" />
     <ClInclude Include="Variables.h" />
+    <ClInclude Include="Wave.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

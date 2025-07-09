@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "Zombie.h"
 #include "Player.h"
-
+#include "SpriteGo.h"
+#include "Blood.h"
+#include "SceneGame.h"
 Zombie::Zombie(const std::string& name)
 	: GameObject(name)
 {
@@ -44,7 +46,7 @@ void Zombie::Init()
 {
 	sortingLayer = SortingLayers::Foreground;
 	sortingOrder = 0;
-	
+
 
 
 	SetType(type);
@@ -59,8 +61,6 @@ void Zombie::Reset()
 	player = (Player*)SCENE_MGR.GetCurrentScene()->FindGameObject("Player");
 
 	body.setTexture(TEXTURE_MGR.Get(texId), true);
-	texbloodId = "graphics/blood.png";
-	blood.setTexture(TEXTURE_MGR.Get(texbloodId), true);
 
 	SetOrigin(Origins::MC);
 	SetPosition({ 0.f, 0.f });
@@ -69,12 +69,14 @@ void Zombie::Reset()
 
 	hp = maxHp;
 	attackTimer = 0.f;
-	bloodTimer = 10.f;
+	hpAdd = 1;
+	speedAdd = 0.1f;
 }
 
 void Zombie::Update(float dt)
 {
 	//std::cout << "°Å¸® : " << Utils::Distance(player->GetPosition(), GetPosition()) << std::endl;
+
 	if (Utils::Distance(player->GetPosition(), GetPosition()) <= 5 || shotTimer > 0.f) {
 		//speed = 0.f;
 		if (shotTimer > 0.f)
@@ -106,21 +108,20 @@ void Zombie::Update(float dt)
 		}
 
 	}
-	if (bloodon)
+	Addtimer += dt;
+	if (Addtimer > 10.f && Addtimer < 12.f)
 	{
-		bloodTimer -= dt;
-	}
 
+		hpAdd += 10;
+		speed += speedAdd;
+	}
 }
 
 void Zombie::Draw(sf::RenderWindow& window)
 {
 	window.draw(body);
 	hitbox.Draw(window);
-	if (bloodTimer > 0.f)
-	{
-		window.draw(blood);
-	}
+
 
 }
 
@@ -159,12 +160,28 @@ void Zombie::SetType(Types type)
 void Zombie::OnDamage(int d)
 {
 	hp = Utils::Clamp(hp - d, 0, maxHp);
-	if (hp == 0) {
-		SetActive(false);
-		bloodon = true;
+
+	if (hp == 0)
+	{
+		OnDie();
 	}
 	else
 	{
 		shotTimer = 0.3f;
 	}
+}
+
+void Zombie::OnDie()
+{
+
+	Blood* blood = new Blood();
+	blood->SetTexture("graphics/blood.png");
+	blood->SetPosition(GetPosition());
+	blood->SetOrigin(Origins::MC);
+	SCENE_MGR.GetCurrentScene()->AddGameObject(blood);
+	SceneGame* sceneGame = dynamic_cast<SceneGame*>(SCENE_MGR.GetCurrentScene());
+	if (sceneGame)
+		sceneGame->OnZombieKilled();
+	SetActive(false);
+
 }

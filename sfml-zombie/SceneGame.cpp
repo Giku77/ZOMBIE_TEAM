@@ -21,7 +21,7 @@ void SceneGame::Init() {
 	texIds.push_back("graphics/blood.png");
 
 
-	AddGameObject(new TileMap("TileMap"));
+	tilemap =(TileMap*)AddGameObject(new TileMap("TileMap"));
 
 	player = (Player*)AddGameObject(new Player("Player"));
 
@@ -30,6 +30,13 @@ void SceneGame::Init() {
 		zombie->SetActive(false);
 		zombiePool.push_back(zombie);
 	}
+
+	WaveCount = 0;
+	ZombieToSpawn = 10 + WaveCount * 5;
+	ZombieSpawned = 0;
+	ZombieRemaining = 0;
+	SpawnTimer = 0;
+	SpawnInterval = 1.f;
 
 	Scene::Init();
 }
@@ -84,14 +91,27 @@ void SceneGame::Update(float dt)
 			++it;
 		}
 	}
+	
 
-	worldView.setCenter(player->GetPosition());
+	// 웨이브 클리어 후 시작
+	if (ZombieRemaining <= 0) 
+	{
+		if (tilemap != nullptr)
+		{
+			tilemap->Set({ 12 + WaveCount * 4,12 + WaveCount * 4 }, { 50.f,50.f });
+			player->SetPosition({ 0.f+WaveCount *100, 0.f+ WaveCount * 100 });
+		}
+		WaveCount++;
+		ZombieToSpawn = 10 + WaveCount * 3;
+		ZombieSpawned = ZombieToSpawn;
+		ZombieRemaining = ZombieToSpawn;
+		SpawnZombies(ZombieSpawned);
 
-	if (isActive) {
-		SpawnZombies(10);
-		isActive = false;
+
+
+		std::cout << "Wave " << WaveCount << " 시작!\n";
 	}
-
+	worldView.setCenter(player->GetPosition());
 	if (InputMgr::GetKeyDown(sf::Keyboard::Enter)) {
 		SCENE_MGR.ChangeScene(SceneIds::Game);
 	}
@@ -116,14 +136,21 @@ void SceneGame::SpawnZombies(int count)
 
 		zombie->Reset();	
 
-		zombie->SetPosition(Utils::RandomPointInRect({ -300.f, -300.f, 600.f, 600.f }));
+		zombie->SetPosition(Utils::RandomPointInRect({ -300.f,-300.f, 
+			600.f+ (WaveCount-1) * 200, 600.f + (WaveCount - 1) * 200 }));
 	
 
 		zombieList.push_back(zombie);
 	}
 }
 
-void SceneGame::Draw(sf::RenderWindow& window) {
+void SceneGame::OnZombieKilled()
+{
+	ZombieRemaining--;
+}
+
+void SceneGame::Draw(sf::RenderWindow& window) 
+{
 	Scene::Draw(window);
 
 	window.setView(uiView);

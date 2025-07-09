@@ -6,7 +6,7 @@ class SpriteGo : public GameObject
 protected:
 	sf::Sprite sprite;
 	std::string textureId;
-
+	
 public:
 	SpriteGo(const std::string& texPlayerId = "", const std::string& name = "");
 	~SpriteGo() override = default;
@@ -22,6 +22,8 @@ public:
 	void SetScale(const sf::Vector2f& s) override;
 	void SetOrigin(const sf::Vector2f& o) override;
 	void SetOrigin(Origins preset) override;
+
+	void SetTexture(const std::string& id);
 
 	void Init() override;
 	void Release() override;
