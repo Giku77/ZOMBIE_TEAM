@@ -110,6 +110,9 @@ void SceneGame::Update(float dt)
 	if (InputMgr::GetKeyDown(sf::Keyboard::Enter)) {
 		SCENE_MGR.ChangeScene(SceneIds::Game);
 	}
+	if (InputMgr::GetKeyDown(sf::Keyboard::BackSpace)) {
+		SCENE_MGR.ChangeScene(SceneIds::Title);
+	}
 }
 
 void SceneGame::SpawnZombies(int count)
