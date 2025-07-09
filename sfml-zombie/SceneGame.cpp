@@ -100,6 +100,7 @@ void SceneGame::Update(float dt)
 	uihud->SetHp(player->getHp());
 	uihud->SetLevel(player->getLv());
 	uihud->SetWave(WaveCount);
+	uihud->SetBullet(player->GetAmmo(),player->GetMaxAmmo());
 	uihud->Update(dt);
 	Scene::Update(dt);
 
@@ -114,8 +115,7 @@ void SceneGame::Update(float dt)
 		}
 	}
 
-
-	// ¿þÀÌºê Å¬¸®¾î ÈÄ ½ÃÀÛ
+	// ï¿½ï¿½ï¿½Ìºï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	if (ZombieRemaining <= 0)
 	{
 		WaveCount++;
@@ -143,10 +143,7 @@ void SceneGame::Update(float dt)
 			}
 
 		}
-
-
-
-		std::cout << "Wave " << WaveCount << " ½ÃÀÛ!\n";
+		std::cout << "Wave " << WaveCount << " ï¿½ï¿½ï¿½ï¿½!\n";
 	}
 	worldView.setCenter(player->GetPosition());
 

@@ -34,7 +34,6 @@ protected:
 	int ammo = 0;
 	int maxAmmo = 0;
 
-
 	int level = 1;
 	float exp = 0.f;
 	float nextExp = 100.f;
@@ -63,6 +62,7 @@ public:
 		if (maxAmmo > 100) maxAmmo = 100;
 	}
 	int GetAmmo() const { return ammo; }
+	int GetMaxAmmo() const { return maxAmmo; }
 
 	Player(const std::string& name = "");
 	Player(const std::string& name, TileMap* t);
