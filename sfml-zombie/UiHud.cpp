@@ -45,7 +45,7 @@ void UiHud::AddFontId(const sf::String fontId)
 {
 	if (!font.loadFromFile("fonts/zombiecontrol.ttf"))
 	{
-		std::cout << "��Ʈ ���� �ε� ����" << std::endl;
+		std::cout << "폰트 로드 불가" << std::endl;
 	}
 	//for (int i =0; i<500; i++)
 	//{
@@ -94,10 +94,6 @@ void UiHud::Init()
 	hpText.setPosition({ FRAMEWORK.GetWindowBounds().left + 50.f,FRAMEWORK.GetWindowBounds().top + 50.f });
 	levelText.setPosition({ FRAMEWORK.GetWindowBounds().left + 50.f,FRAMEWORK.GetWindowBounds().top + 100.f });
 
-	waveText.setString("wave:"+std::to_string(wavecount));
-	hpText.setString("hp:"+std::to_string(hp));
-	levelText.setString("level:"+std::to_string(level));
-
 	waveText.setCharacterSize(40);
 	hpText.setCharacterSize(40);
 	levelText.setCharacterSize(40);
@@ -126,6 +122,9 @@ void UiHud::Reset()
 
 void UiHud::Update(float dt)
 {
+	texts[0].setString("wave:" + std::to_string(wavecount));
+	texts[1].setString("hp:" + std::to_string(hp));
+	texts[2].setString("level:" + std::to_string(level));
 }
 
 void UiHud::Draw(sf::RenderWindow& window)
@@ -137,7 +136,6 @@ void UiHud::Draw(sf::RenderWindow& window)
 	
 	for (int i = 0; i < 1; i++)
 	{
-		//std::cout << "������ �׸���" << std::endl;
 		window.draw(levelBarHanKan);
 	}
 }

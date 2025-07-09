@@ -2,9 +2,15 @@
 #include "Player.h"
 #include "SceneGame.h"
 #include "Bullet.h"
+#include "TileMap.h"
 
 Player::Player(const std::string& name)
 	:GameObject(name)
+{
+}
+
+Player::Player(const std::string& name, TileMap* t)
+	:GameObject(name), tile(t)
 {
 }
 
@@ -83,12 +89,14 @@ void Player::Update(float dt)
 			++it;
 		}
 	}
+ 
 
 	//std::cout << "플레이어 위치: " << GetPosition().x << " / " << GetPosition().y << std::endl;
 	//Pos
 	if (!isAz) {
 		dir.x = InputMgr::GetAxis(Axis::Horizontal);
 		dir.y = InputMgr::GetAxis(Axis::Vertical);
+		prevPos = GetPosition();
 
 		if (Utils::Magnitude(dir) > 1.f) {
 			Utils::Normalize(dir); //대각선 이동에서 정규화로 1로 크기 조절 필요
@@ -103,6 +111,20 @@ void Player::Update(float dt)
 			std::cout << "입력 : " << InputMgr::Getshuffled() << std::endl;
 			InputMgr::isTyping = true;
 		}
+	}
+
+	for (auto& w : tile->wallRects) {
+		sf::FloatRect wallRect = Utils::TransformRect(tile->GetTransform(), w);
+
+		if (wallRect.intersects(GetGlobalBounds())) {
+			collided = true;
+			break;
+		}
+	}
+
+	if (collided) {
+		SetPosition(prevPos);
+		collided = false;
 	}
 	
 	/*if (!InputMgr::isTyping) {

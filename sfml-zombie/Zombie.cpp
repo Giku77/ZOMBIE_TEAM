@@ -4,6 +4,7 @@
 #include "SpriteGo.h"
 #include "Blood.h"
 #include "SceneGame.h"
+#include "TileMap.h"
 Zombie::Zombie(const std::string& name)
 	: GameObject(name)
 {
@@ -71,6 +72,7 @@ void Zombie::Release()
 void Zombie::Reset()
 {
 	player = (Player*)SCENE_MGR.GetCurrentScene()->FindGameObject("Player");
+	tile = (TileMap*)SCENE_MGR.GetCurrentScene()->FindGameObject("TileMap");
 
 	body.setTexture(TEXTURE_MGR.Get(texId), true);
 
@@ -108,6 +110,7 @@ void Zombie::Update(float dt)
 			dir = Utils::GetNormal(player->GetPosition() - GetPosition());
 			SetRotation(Utils::Angle(dir));
 			SetPosition(GetPosition() + dir * speed * dt);
+			prevPos = GetPosition();
 		}
 		hitbox.UpdateTransform(body, GetLocalBounds());
 
@@ -124,6 +127,20 @@ void Zombie::Update(float dt)
 
 			hpAdd += 10;
 			speed += speedAdd;
+		}
+
+		for (auto& w : tile->wallRects) {
+			sf::FloatRect wallRect = Utils::TransformRect(tile->GetTransform(), w);
+
+			if (wallRect.intersects(GetGlobalBounds())) {
+				collided = true;
+				break;
+			}
+		}
+
+		if (collided) {
+			SetPosition(prevPos);
+			collided = false;
 		}
 }
 

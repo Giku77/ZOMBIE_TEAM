@@ -26,6 +26,8 @@ protected:
 
 	Player* player = nullptr;
 
+	float removeTimer = 0.f;
+
 public:
 	Item(const std::string& name = "");
 	virtual ~Item() = default;

@@ -21,6 +21,11 @@ public:
 	virtual ~TileMap() = default;
 
 	sf::FloatRect GetBounds() const;
+
+	const sf::Transform& GetTransform() const
+	{
+		return transform;
+	}
 	
 
 	void Set(const sf::Vector2i& c, const sf::Vector2f& s);

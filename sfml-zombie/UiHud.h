@@ -54,6 +54,9 @@ public:
 	void AddMessage(const sf::String Message);
 
 	void SetLevelBar(float l);
+	void SetLevel(int l) { level = l; };
+	void SetHp(int l) { hp = l; };
+	void SetWave(int l) { wavecount = l; };
 
 	void Init() override;
 	void Release() override;

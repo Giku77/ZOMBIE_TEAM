@@ -68,10 +68,12 @@ void Item::Reset()
 	SetPosition({ 0.f, 0.f });
 	SetRotation(0.f);
 	SetScale({ 1.f, 1.f });
+	removeTimer = 0.f;
 }
 
 void Item::Update(float dt)
 {
+	removeTimer += dt;
 	hitBox.UpdateTransform(sprite, GetLocalBounds());
 	player = (Player*)SCENE_MGR.GetCurrentScene()->FindGameObject("Player");
 	if (Utils::CheckCollision(sprite, player->getBody())) {
@@ -85,6 +87,10 @@ void Item::Update(float dt)
 			player->AddSpeed(100.f);
 		}
 		SetActive(false);
+	}
+	if (removeTimer > 7.f) {
+		SetActive(false);
+		removeTimer = 0.f;
 	}
 }
 
