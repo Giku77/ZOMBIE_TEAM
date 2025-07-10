@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "UiHud.h"
+#include "Zombie.h"
 
 UiHud::UiHud(const std::string& name)
 	: GameObject(name), texts(0), textPos(0), textString('0'), levelBar(0), levelBarHanKan({ 0,0 })
@@ -64,6 +65,9 @@ void UiHud::SetHpBar(int currentHp, int maxHp, const sf::Vector2f& pos)
 	monsterHpBars.clear();
 
 	if (currentHp <= 0)
+		return;
+
+	if (zombie != nullptr && !zombie->GetActive())
 		return;
 
 	const float barWidth = 100.f;   

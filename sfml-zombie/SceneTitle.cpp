@@ -55,7 +55,6 @@ void SceneTitle::Init()
 void SceneTitle::Enter()
 {
 	Scene::Enter();
-	SOUND_MGR.Play();
 	//FRAMEWORK.GetWindow().setView(uiView);
 	sf::Vector2u texSize = TEXTURE_MGR.Get("graphics/background.png").getSize();
 	std::cout << "��� �ؽ�ó ������: " << texSize.x << "x" << texSize.y << std::endl;

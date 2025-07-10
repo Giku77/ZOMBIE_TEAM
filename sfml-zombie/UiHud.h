@@ -2,10 +2,13 @@
 #include "GameObject.h"
 #include "TextGo.h"
 
+class Zombie;
+
 class UiHud :
 	public GameObject
 {
 protected:
+	Zombie* zombie = nullptr;
 	std::vector<sf::Text> texts;
 
 	std::vector<sf::Vector2f> textPos;
@@ -60,6 +63,7 @@ public:
 	void SetCharacterSize(int size);
 	void AddFontId(const sf::String id);
 	void AddMessage(const sf::String Message);
+	void SetZombie(Zombie* z) { zombie = z; }
 
 	void SetHpBar(int currentHp, int maxHp, const sf::Vector2f& pos);
 	void SetLevelBar(float l);

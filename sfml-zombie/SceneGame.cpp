@@ -122,7 +122,10 @@ void SceneGame::Update(float dt)
 	uihud->SetLevel(player->getLv());
 	uihud->SetWave(WaveCount);
 	uihud->SetBullet(player->GetAmmo(),player->GetMaxAmmo());
-	if (boss != nullptr) uihud->SetHpBar(boss->GetHp(), 500, (sf::Vector2f)WorldToScreen(boss->GetPosition()));
+	if (boss != nullptr) {
+		uihud->SetZombie(boss);
+		uihud->SetHpBar(boss->GetHp(), 500, (sf::Vector2f)WorldToScreen(boss->GetPosition()));
+	}
 	uihud->Update(dt);
 	Scene::Update(dt);
 
@@ -173,10 +176,10 @@ void SceneGame::Update(float dt)
 
 
 
-	//if (InputMgr::GetKeyDown(sf::Keyboard::LShift)) {
-	//	//SpawnItems(15);
-	//	SpawnBoss(500, 200.f, 20.f, 0.8f, "graphics/bloater.png");
-	//}
+	/*if (InputMgr::GetKeyDown(sf::Keyboard::LShift)) {
+		SpawnItems(15);
+		SpawnBoss(500, 200.f, 20.f, 0.8f, "graphics/bloater.png");
+	}*/
 
 	if (InputMgr::GetKeyDown(sf::Keyboard::Enter)) {
 		SCENE_MGR.ChangeScene(SceneIds::Game);
